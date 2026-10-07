@@ -1,0 +1,42 @@
+{
+  "name": "Ubuntu",
+  "image": "nvidia/cuda:13.1.2-cudnn-devel-ubuntu24.04",
+  "features": {
+    "ghcr.io/devcontainers/features/common-utils:2": {
+      "configureZshAsDefaultShell": true
+    },
+    "ghcr.io/devcontainers/features/docker-in-docker:4": {},
+    "ghcr.io/devcontainers/features/git:1": {},
+    "ghcr.io/devcontainers/features/git-lfs:1": {},
+    "ghcr.io/devcontainers/features/github-cli:1": {},
+    "ghcr.io/hoshiori-dev/devcontainer-features/deno:1": {},
+    "ghcr.io/hoshiori-dev/devcontainer-features/hf-cli:1": {},
+    "ghcr.io/hoshiori-dev/devcontainer-features/nvidia-container-toolkit:1": {},
+    "ghcr.io/hoshiori-dev/devcontainer-features/uv:1": {
+      "toolsToInstall": "pre-commit,rust-just"
+    }
+  },
+  "remoteUser": "codespace",
+  "postCreateCommand": "pre-commit install",
+  "hostRequirements": {
+    "gpu": "optional",
+    "memory": "24gb"
+  },
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "deno.enable": true
+      },
+      "extensions": [
+        "ms-python.python",
+        "charliermarsh.ruff",
+        "denoland.vscode-deno",
+        "EditorConfig.EditorConfig",
+        "ms-vscode-remote.remote-containers",
+        "anthropic.claude-code",
+        "openai.chatgpt",
+        "google.google-antigravity"
+      ]
+    }
+  }
+}
