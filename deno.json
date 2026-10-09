@@ -8,7 +8,10 @@
     "singleQuote": false,
     "proseWrap": "always",
     "exclude": [
-      "LICENSE"
+      "LICENSE",
+      ".specify/",
+      ".claude/skills/",
+      ".agents/skills/"
     ]
   },
   "lint": {

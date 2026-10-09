@@ -1,0 +1,19 @@
+# Root workspace: dependencies of the harness scripts (scripts/) and the shared libraries
+# under packages/. Experiments are not members; each has its own pyproject.toml and uv.lock.
+# No build-system: the root is a virtual project, uv installs only its dependencies.
+
+[project]
+name = "experiment-harness"
+version = "0.0.0"
+requires-python = ">=3.12"
+dependencies = []
+
+[dependency-groups]
+dev = ["pytest>=8", "pyyaml>=6"]
+
+[tool.uv.workspace]
+members = ["packages/*"]
+
+[tool.ruff]
+line-length = 120
+target-version = "py312"

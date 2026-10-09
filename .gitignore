@@ -61,3 +61,8 @@ skills-lock.json
 .env.*
 !.env.example
 !.env.*.example
+
+### Experiments and shared libraries ###
+# Each experiment and shared library has its own environment
+experiments/*/.venv
+packages/*/.venv

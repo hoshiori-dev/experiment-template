@@ -1,4 +1,8 @@
-title = "PII Rules: Email and IP Address"
+# Scanner rules: the gitleaks default secret rules plus PII rules for a public repository
+# (emails, public IP addresses, absolute paths under a user's home directory).
+
+[extend]
+useDefault = true
 
 # Block emails, allow only GitHub/GitLab anonymous addresses
 [[rules]]
@@ -43,11 +47,13 @@ regexes = [
     # OpenDNS
     '''\b208\.67\.222\.222\b''', '''\b208\.67\.220\.220\b'''
 ]
-# Exclude common dependency directories and this config file
+# Exclude lock files, frozen manifests, dependency declarations and this config file
 paths = [
-    # Some semantic version may look like an IP, e.g. 0.1.0
-    '''^uv\.lock$''',
-    '''^pyproject\.toml$''',
+    # Version strings may look like an IP, e.g. 1.2.3.4; every uv.lock, including
+    # the ones inside experiments, and every frozen manifest runs/R###.requirements.txt
+    '''(^|/)uv\.lock$''',
+    '''\.requirements\.txt$''',
+    '''(^|/)pyproject\.toml$''',
     # Exclude this config file
     '''\.gitleaks\.toml'''
 ]
@@ -71,6 +77,19 @@ regexes = [
     '''(?i)\b2606:4700:4700::1111\b''', '''(?i)\b2606:4700:4700::1001\b'''
 ]
 # Exclude common dependency directories and this config file
+paths = [
+    # Exclude this config file
+    '''\.gitleaks\.toml'''
+]
+
+# Block absolute paths under a user's home directory: they identify a machine or an
+# account. Repository files use paths relative to the repository root.
+[[rules]]
+id = "restrict-home-paths"
+description = "Absolute path under a home directory detected. Use repository-relative paths."
+regex = '''(/home/[A-Za-z0-9._-]+/|/Users/[A-Za-z0-9._-]+/|[A-Za-z]:\\Users\\[A-Za-z0-9._-]+\\|/root/)'''
+tags = ["path", "PII"]
+[rules.allowlist]
 paths = [
     # Exclude this config file
     '''\.gitleaks\.toml'''

@@ -1,5 +1,11 @@
 # See https://pre-commit.com for more information
 # See https://pre-commit.com/hooks.html for more hooks
+#
+# Hook types: pre-commit (content checks), commit-msg (message rules), pre-push (outbound
+# check of the outgoing commits). `pre-commit install` installs all three.
+default_install_hook_types: [pre-commit, commit-msg, pre-push]
+default_stages: [pre-commit]
+
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v6.0.0
@@ -33,12 +39,10 @@ repos:
         types_or: [python, pyi]
 
   - repo: https://github.com/astral-sh/uv-pre-commit
-    rev: 0.10.9
+    rev: 0.12.23
     hooks:
       - id: uv-lock
         name: update uv.lock file
-      - id: uv-export
-        name: export dependencies to requirements.txt
 
   - repo: local
     hooks:
@@ -47,7 +51,8 @@ repos:
         entry: deno fmt
         language: system
         files: \.(?:[cm]?[jt]sx?|jsonc?|ya?ml|md|markdown)$
-        exclude: ^LICENSE$
+        # Same exclusions as deno.json; deno fmt errors when every file it is given is excluded.
+        exclude: ^(?:LICENSE|\.specify/|\.claude/skills/|\.agents/skills/)
 
       - id: deno-lint
         name: deno lint
@@ -57,13 +62,40 @@ repos:
 
       - id: just-fmt
         name: justfile formatting
-        entry: just --fmt --check
+        entry: just --fmt --check --unstable
         language: system
         pass_filenames: false
         files: ^(?:justfile|Justfile|\.justfile)$
 
+      - id: check-commit-message
+        name: commit message rules
+        entry: uv run python scripts/check_commit_message.py
+        language: system
+        stages: [commit-msg]
+
+      - id: validate-run-records
+        name: validate run records
+        entry: uv run python scripts/run_record.py validate
+        language: system
+        files: ^experiments/.*/runs/R[0-9]{3}\.yaml$
+
+      - id: check-branch-scope
+        name: staged paths match the branch scope
+        entry: uv run python scripts/check_branch_scope.py
+        language: system
+        pass_filenames: false
+        always_run: true
+
+      - id: outbound-history
+        name: outbound check of outgoing commits
+        entry: uv run python scripts/outbound_check.py --git-range
+        language: system
+        stages: [pre-push]
+        pass_filenames: false
+        always_run: true
+
   - repo: https://github.com/gitleaks/gitleaks
-    rev: v8.24.2
+    rev: v8.30.1
     hooks:
       - id: gitleaks
         name: secret scanning with gitleaks
