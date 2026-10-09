@@ -1,0 +1,30 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "permission": {
+    "bash": {
+      "*": "allow",
+      "git push --force*": "deny",
+      "git push -f *": "deny",
+      "git push * main": "deny",
+      "git push origin main*": "deny",
+      "git push -f": "deny",
+      "git push --force": "deny",
+      "git push * main:*": "deny",
+      "git push * HEAD:main*": "deny",
+      "docker push *": "deny",
+      "gh issue edit *": "deny",
+      "gh issue close *": "deny",
+      "gh issue reopen *": "deny",
+      "gh issue delete *": "deny",
+      "gh pr close *": "deny",
+      "gh pr ready *": "deny",
+      "gh pr review *": "deny",
+      "gh label *": "deny",
+      "gh repo edit *": "deny",
+      "gh repo delete *": "deny",
+      "gh secret *": "deny",
+      "gh ruleset *": "deny",
+      "gh api *": "ask"
+    }
+  }
+}

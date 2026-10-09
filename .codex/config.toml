@@ -1,0 +1,9 @@
+#:schema https://developers.openai.com/codex/config-schema.json
+# Project config for Codex CLI. Applies once the project is trusted. Command rules that
+# keep external writes with humans are in .codex/rules/harness.rules.
+
+approval_policy = "on-request"
+sandbox_mode = "workspace-write"
+
+[sandbox_workspace_write]
+network_access = false
