@@ -1,0 +1,29 @@
+id: R001
+experiment: exp-003-probe-vs-finetune
+decision: "Decide by the spec's rule which arm, linear probe or last-block fine-tuning, has the higher test accuracy."
+command: "docker run --gpus all --network none --read-only <image built from this directory at the source commit> --design /app/design.json --data-dir /data/food101 --weights /data/weights/resnet18-f37072fd.pth --out /out"
+params_source: git
+params_path: experiments/exp-003-probe-vs-finetune/design.json
+data:
+  - name: food101
+    source: "https://huggingface.co/datasets/ethz/food101"
+    version: "83488de741c1bd1ce27aa6a2b33e19c7bdf92ca9"
+    path: .local/data/food101
+  - name: resnet18-imagenet1k-v1
+    source: "https://download.pytorch.org/models/resnet18-f37072fd.pth"
+    version: "sha256:f37072fd47e89c5e827621c5baffa7500819f7896bbacec160b1a16c560e07ec"
+    path: .local/data/resnet18-imagenet1k-v1
+resources:
+  accelerator: gpu
+  count: 1
+max_duration: "PT15M"
+environment:
+  dockerfile: experiments/exp-003-probe-vs-finetune/Dockerfile
+  lockfile: experiments/exp-003-probe-vs-finetune/uv.lock
+  requirements: experiments/exp-003-probe-vs-finetune/runs/R001.requirements.txt
+budget:
+  reserved: 0.25
+spec_digest: "sha256:17923a0d10628fa49190d1c6a6e5190b6c93fc3573ad12926ed335748fc1a893"
+tracker:
+  project: exp-003-probe-vs-finetune
+  run: R001
