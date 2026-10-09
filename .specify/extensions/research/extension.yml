@@ -1,0 +1,45 @@
+schema_version: "1.0"
+
+extension:
+  id: "research"
+  name: "Research Loop"
+  version: "0.1.0"
+  description: "The research loop around an Experiment: draft an Epic, propose its Experiments, approve a spec, execute a Formal Run, close out, synthesize, show status."
+  category: "process"
+  effect: "read-write"
+  author: "experiment-template"
+  license: "Apache-2.0"
+
+requires:
+  speckit_version: ">=1.0.0"
+
+provides:
+  commands:
+    - name: "speckit.research.epic"
+      file: "commands/speckit.research.epic.md"
+      description: "Draft an Epic (objective, scope, constraints, budget policy, exit criteria) for a maintainer to publish"
+    - name: "speckit.research.experiments"
+      file: "commands/speckit.research.experiments.md"
+      description: "Propose the Experiments of a published Epic and create their experiment issues as sub-issues"
+    - name: "speckit.research.approve"
+      file: "commands/speckit.research.approve.md"
+      description: "Independent approval of an Experiment spec against its issue and Epic, by a clean-context agent"
+    - name: "speckit.research.run"
+      file: "commands/speckit.research.run.md"
+      description: "Execute a Formal Run: run branch, run record, frozen environment, source commit, preflight, merge back"
+    - name: "speckit.research.finish"
+      file: "commands/speckit.research.finish.md"
+      description: "Close out an Experiment: README deletion test, evidence citations, traceability check, hand over"
+    - name: "speckit.research.synthesize"
+      file: "commands/speckit.research.synthesize.md"
+      description: "Synthesize an Epic: rendezvous commit, evidence selection, proposed changes to docs/, PR draft"
+    - name: "speckit.research.status"
+      file: "commands/speckit.research.status.md"
+      description: "Read-only research status: experiments, runs, budgets, Epic validity"
+
+hooks: {}
+
+tags:
+  - "research"
+  - "experiment"
+  - "workflow"

@@ -1,0 +1,1 @@
+../../../.specify/extensions/research/.specify-dev/agent-commands/claude/speckit-research-synthesize/SKILL.md

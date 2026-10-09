@@ -1,0 +1,91 @@
+schema_version: "1.0"
+
+preset:
+  id: "research"
+  name: "Research Workflow"
+  version: "0.1.0"
+  description: "Replaces the software-delivery meaning of spec, plan and tasks with the research meaning: spec is the fence, plan is advisory, tasks is a rolling ledger."
+  author: "experiment-template"
+  license: "Apache-2.0"
+
+requires:
+  speckit_version: ">=1.0.0"
+
+provides:
+  templates:
+    - type: "template"
+      name: "spec-template"
+      file: "templates/spec-template.md"
+      description: "Experiment spec: question, constraints, completion criteria, stop conditions, budget"
+      replaces: "spec-template"
+
+    - type: "template"
+      name: "plan-template"
+      file: "templates/plan-template.md"
+      description: "Advisory plan: current strategy and candidate runs, rewritten as evidence changes it"
+      replaces: "plan-template"
+
+    - type: "template"
+      name: "tasks-template"
+      file: "templates/tasks-template.md"
+      description: "Rolling task ledger: numbered tasks whose done and abandoned entries are never deleted"
+      replaces: "tasks-template"
+
+    - type: "command"
+      name: "speckit.specify"
+      file: "commands/speckit.specify.md"
+      description: "Start an Experiment from an experiment issue: branch, spec, README, draft pull request"
+      replaces: "speckit.specify"
+
+    - type: "command"
+      name: "speckit.plan"
+      file: "commands/speckit.plan.md"
+      description: "Write or rewrite the advisory plan for the current Experiment"
+      replaces: "speckit.plan"
+
+    - type: "command"
+      name: "speckit.tasks"
+      file: "commands/speckit.tasks.md"
+      description: "Update the rolling task ledger of the current Experiment"
+      replaces: "speckit.tasks"
+
+    - type: "command"
+      name: "speckit.implement"
+      file: "commands/speckit.implement.md"
+      description: "Iterate the Experiment: explore freely inside its directories, keep the ledger, stop at the fence"
+      replaces: "speckit.implement"
+
+    - type: "command"
+      name: "speckit.analyze"
+      file: "commands/speckit.analyze.md"
+      description: "Not used in this repository; stub pointing to the research command"
+      replaces: "speckit.analyze"
+
+    - type: "command"
+      name: "speckit.checklist"
+      file: "commands/speckit.checklist.md"
+      description: "Not used in this repository; stub pointing to the research command"
+      replaces: "speckit.checklist"
+
+    - type: "command"
+      name: "speckit.clarify"
+      file: "commands/speckit.clarify.md"
+      description: "Not used in this repository; stub pointing to the research command"
+      replaces: "speckit.clarify"
+
+    - type: "command"
+      name: "speckit.converge"
+      file: "commands/speckit.converge.md"
+      description: "Not used in this repository; stub pointing to the research command"
+      replaces: "speckit.converge"
+
+    - type: "command"
+      name: "speckit.taskstoissues"
+      file: "commands/speckit.taskstoissues.md"
+      description: "Not used in this repository; stub pointing to the research command"
+      replaces: "speckit.taskstoissues"
+
+tags:
+  - "research"
+  - "experiment"
+  - "workflow"

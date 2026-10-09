@@ -1,0 +1,25 @@
+{
+  "schema_version": "1.0",
+  "extensions": {
+    "research": {
+      "version": "0.1.0",
+      "source": "local",
+      "manifest_hash": "sha256:1d3831f89431c6cc75e606420a055f553a3f232dc2169140616638a53a173d64",
+      "enabled": true,
+      "priority": 10,
+      "registered_commands": {
+        "claude": [
+          "speckit.research.epic",
+          "speckit.research.experiments",
+          "speckit.research.approve",
+          "speckit.research.run",
+          "speckit.research.finish",
+          "speckit.research.synthesize",
+          "speckit.research.status"
+        ]
+      },
+      "registered_skills": [],
+      "installed_at": "2026-10-09T08:47:55.337137+00:00"
+    }
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "schema_version": "1.0",
+  "presets": {
+    "research": {
+      "version": "0.1.0",
+      "source": "local",
+      "manifest_hash": "sha256:a4c63a8629ffe5654d29888ef07c7a0f46a0be95f3d52931254c25a4f21d543e",
+      "enabled": true,
+      "priority": 10,
+      "registered_commands": {
+        "claude": [
+          "speckit.specify",
+          "speckit.plan",
+          "speckit.tasks",
+          "speckit.implement",
+          "speckit.analyze",
+          "speckit.checklist",
+          "speckit.clarify",
+          "speckit.converge",
+          "speckit.taskstoissues"
+        ]
+      },
+      "registered_skills": {
+        "claude": [
+          "speckit-specify",
+          "speckit-plan",
+          "speckit-tasks",
+          "speckit-implement",
+          "speckit-analyze",
+          "speckit-checklist",
+          "speckit-clarify",
+          "speckit-converge",
+          "speckit-taskstoissues"
+        ]
+      },
+      "installed_at": "2026-10-09T08:47:50.285235+00:00"
+    }
+  }
+}
