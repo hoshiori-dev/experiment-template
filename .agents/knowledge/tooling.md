@@ -125,13 +125,14 @@ optional on the host; a run that requests `gpu` fails preflight without one.
 | OpenCode    | `opencode.json`                              | `permission.bash` patterns; last matching rule wins, `*` first                                     | raw-string pattern match                                                                        |
 
 All three allow `git push` to the agent's own branches, `gh issue view|list|create|comment`,
-`gh pr view|list|create|edit|comment|merge`, `just`, `uv`, `docker build|run` and `pytest`; deny `git push --force` (and
-`-f`, `--force-with-lease`), the usual spellings of a push to `main`, `docker push`,
-`gh issue edit|close|reopen|delete`, `gh pr close|ready|review`, `gh label`, `gh repo edit|delete`, `gh secret` and
-`gh ruleset`; `gh api` asks, because it can write anything. These lists catch slips; the token is the boundary. Skills:
-project skills are canonical in `.agents/skills/<name>/SKILL.md` with `.claude/skills/<name>` a relative symlink to
-them; Spec Kit skills are canonical in `.claude/skills/speckit-*/` with `.agents/skills/speckit-*` symlinks to them (see
-Spec Kit above). Codex reads `.agents/skills/`, OpenCode reads `.claude/skills/`.
+`gh pr view|list|create|edit|comment|merge`, `gh label list`, `just`, `uv`, `docker build|run` and `pytest`; deny
+`git push --force` (and `-f`, `--force-with-lease`), the usual spellings of a push to `main`, `docker push`,
+`gh repo edit|delete`, `gh secret` and `gh ruleset`; and ask before `gh issue edit|close|reopen|delete`,
+`gh pr close|ready|review` and `gh label create|edit|delete|clone`, which run only on the user's explicit request
+(AGENTS.md, Always). `gh api` asks, because it can write anything. These lists catch slips; the token is the boundary.
+Skills: project skills are canonical in `.agents/skills/<name>/SKILL.md` with `.claude/skills/<name>` a relative symlink
+to them; Spec Kit skills are canonical in `.claude/skills/speckit-*/` with `.agents/skills/speckit-*` symlinks to them
+(see Spec Kit above). Codex reads `.agents/skills/`, OpenCode reads `.claude/skills/`.
 
 ## GitHub
 

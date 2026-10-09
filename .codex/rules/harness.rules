@@ -1,10 +1,12 @@
 # Command rules for Codex CLI (execpolicy). High-automation governance: the agent pushes its
 # own branches, opens and merges experiment pull requests, writes experiment issues and
-# comments, and applies the approval label; it never force-pushes, pushes to main, edits or
-# closes issues (Epics are commented on, never edited), defines labels, or changes repository
-# settings. Rules match an argv prefix; the most restrictive matching rule wins. These lists
-# catch slips; the platform's branch protection and the agent's token are the boundary.
-# .claude/settings.json and opencode.json carry the same intent in their own pattern syntax.
+# comments, and applies the approval label. It never force-pushes, pushes to main, or changes
+# repository settings. Editing, closing, reopening or deleting issues, closing or reviewing
+# pull requests and changing label definitions prompt: they happen only on the user's
+# explicit request. Rules match an argv prefix; the most restrictive matching rule wins.
+# These lists catch slips; the platform's branch protection and the agent's token are the
+# boundary. .claude/settings.json and opencode.json carry the same intent in their own
+# pattern syntax.
 
 prefix_rule(pattern = ["git", "push"], decision = "allow")
 prefix_rule(
@@ -24,19 +26,20 @@ prefix_rule(
 )
 prefix_rule(
     pattern = ["gh", "issue", ["edit", "close", "reopen", "delete"]],
-    decision = "forbidden",
-    justification = "Issues are commented on, never edited, closed or reopened by the agent.",
+    decision = "prompt",
+    justification = "Only on the user's explicit request; a published Epic is commented on, not edited.",
 )
 prefix_rule(
     pattern = ["gh", "pr", ["close", "ready", "review"]],
-    decision = "forbidden",
-    justification = "Pull request state beyond open, label, comment and merge is a human action.",
+    decision = "prompt",
+    justification = "Only on the user's explicit request.",
 )
 prefix_rule(
-    pattern = ["gh", "label"],
-    decision = "forbidden",
-    justification = "Label definitions are platform configuration owned by humans.",
+    pattern = ["gh", "label", ["create", "edit", "delete", "clone"]],
+    decision = "prompt",
+    justification = "Label definitions change only on the user's explicit request.",
 )
+prefix_rule(pattern = ["gh", "label", "list"], decision = "allow")
 prefix_rule(
     pattern = ["gh", "repo", ["edit", "delete"]],
     decision = "forbidden",

@@ -148,13 +148,15 @@ allow attribution (Adjustable settings).
 Anything created or changed off this machine: push, open issue or PR, comment, label, sync tracker data to a remote,
 push an image. The agent does this only through the platform CLI with a write token. Currently **on**: the agent writes
 the content to `.local/drafts/`, runs outbound review (`publishing.md`), then posts it and pushes its own branches. What
-stays with humans: force pushes, pushes to `main`, editing, closing or reopening issues, defining labels, changing
-settings. Prerequisites the owner configures on the platform before the first Epic are listed in `tooling.md` (GitHub):
-branch protection on `main` with pull requests and code-owner review (admins keep bypass, the agent's credential has no
-admin rights), otherwise "protected paths are merged only by humans" has nothing enforcing it. The approving agent
-shares the authoring agent's credential, so the independence of an approval is procedural. Turning writes off again, or
-on in a human-led project, is a protected-file change merged by the owner: the three permission files, this file,
-AGENTS.md and the README.
+stays with humans: force pushes, pushes to `main` and changing settings. Editing, closing, reopening or deleting issues,
+closing or reviewing pull requests and changing label definitions are done by the agent only on the user's explicit
+request in the conversation; the framework asks for confirmation each time, and the agent never starts them on its own.
+Prerequisites the owner configures on the platform before the first Epic are listed in `tooling.md` (GitHub): branch
+protection on `main` with pull requests and code-owner review (admins keep bypass, the agent's credential has no admin
+rights), otherwise "protected paths are merged only by humans" has nothing enforcing it. The approving agent shares the
+authoring agent's credential, so the independence of an approval is procedural. Turning writes off again, or on in a
+human-led project, is a protected-file change merged by the owner: the three permission files, this file, AGENTS.md and
+the README.
 
 ## Confidentiality
 

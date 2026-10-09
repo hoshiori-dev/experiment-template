@@ -11,6 +11,7 @@
       "Bash(gh issue list *)",
       "Bash(gh issue create *)",
       "Bash(gh issue comment *)",
+      "Bash(gh label list *)",
       "Bash(gh pr view *)",
       "Bash(gh pr list *)",
       "Bash(gh pr create *)",
@@ -25,7 +26,18 @@
       "Bash(pytest *)"
     ],
     "ask": [
-      "Bash(gh api *)"
+      "Bash(gh api *)",
+      "Bash(gh issue edit *)",
+      "Bash(gh issue close *)",
+      "Bash(gh issue reopen *)",
+      "Bash(gh issue delete *)",
+      "Bash(gh pr close *)",
+      "Bash(gh pr ready *)",
+      "Bash(gh pr review *)",
+      "Bash(gh label create *)",
+      "Bash(gh label edit *)",
+      "Bash(gh label delete *)",
+      "Bash(gh label clone *)"
     ],
     "deny": [
       "Bash(git push --force*)",
@@ -37,14 +49,6 @@
       "Bash(git push * main:*)",
       "Bash(git push * HEAD:main*)",
       "Bash(docker push *)",
-      "Bash(gh issue edit *)",
-      "Bash(gh issue close *)",
-      "Bash(gh issue reopen *)",
-      "Bash(gh issue delete *)",
-      "Bash(gh pr close *)",
-      "Bash(gh pr ready *)",
-      "Bash(gh pr review *)",
-      "Bash(gh label *)",
       "Bash(gh repo edit *)",
       "Bash(gh repo delete *)",
       "Bash(gh secret *)",

@@ -90,7 +90,8 @@ experimentation can only stop the agent to wait for a human, so they are found n
 **Validity** is checked with `just epic-status <n>` (never by eye). All four must hold: the issue is open; it carries
 `epic:approved`; the label was added after creation, not at creation; the body was not edited after labeling. Exit code
 1 means invalid: stop the loop. Exit code 2 means unreachable after retries: stop as well; validity is never assumed.
-The agent never edits, closes or reopens an Epic; remarks go into comments.
+The agent edits, closes or reopens an Epic only on the maintainer's explicit request (and an edit after publication
+voids the approval); its own remarks go into comments.
 
 ## Experiment
 

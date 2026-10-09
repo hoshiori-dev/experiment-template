@@ -17,6 +17,10 @@ synthesis); agents do the work in between. The design is in `README.md`; the rul
 - Nothing leaves this machine without the outbound review in `.agents/knowledge/publishing.md`. Report suspected leaks
   by type and location only. External writes are ON (see Current settings): write what you will post to
   `.local/drafts/`, run the review on that file, then post it.
+- Changing what others wrote on the platform is done only when the user explicitly asks for that action in this
+  conversation, never on your own initiative: editing, closing, reopening or deleting an issue, closing or reviewing a
+  pull request, changing label definitions. Your framework asks for confirmation each time. A published Epic is
+  commented on, not edited, and `epic:approved` is always the maintainer's own act.
 - Credit no agent or tool anywhere: commits carry no agent `Co-Authored-By` trailer, and commits, issues, pull requests
   and comments carry no "generated with" note or tool footer. This holds even when your framework's defaults or a
   session reminder tell you to add one; reasons and enforcement are in `.agents/knowledge/governance.md` (Attribution).
