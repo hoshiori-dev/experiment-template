@@ -1,0 +1,9 @@
+# Local environments, caches and the image definition itself stay out of the build context.
+.venv
+__pycache__
+*.py[oc]
+.pytest_cache
+.ruff_cache
+.ipynb_checkpoints
+Dockerfile
+.dockerignore

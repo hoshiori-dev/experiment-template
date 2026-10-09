@@ -1,0 +1,16 @@
+# Dependency declaration of one experiment. Rename "experiment" to the experiment ID
+# (for example exp-023-normalization-instability). This directory is not a member of the
+# root workspace: lock it with `uv lock` run here, which writes its own uv.lock.
+
+[project]
+name = "experiment"
+version = "0.0.0"
+requires-python = ">=3.12"
+dependencies = []
+
+# A shared library from packages/ is a path dependency, installed non-editable:
+#
+# dependencies = ["mylib"]
+#
+# [tool.uv.sources]
+# mylib = { path = "../../packages/mylib", editable = false }

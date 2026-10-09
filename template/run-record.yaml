@@ -1,0 +1,80 @@
+# Run record, annotated: definition fields are filled before the source commit, execution
+# fields after the run. Copy to experiments/<id>/runs/R###.yaml.
+# Validate with: uv run python scripts/run_record.py validate experiments/<id>/runs/R###.yaml
+#
+# Definition fields are frozen at the source commit (before the start that commit may still
+# be redone); once the run has started a different input is a new run with a new ID. Only the five execution fields at the end are written after the start. Paths are
+# relative to the repository root. The record holds no metrics and no conclusions: metrics
+# live in the tracker, the interpretation in the experiment README.
+
+id: R001
+experiment: exp-023-normalization-instability
+decision: "Whether layer norm before attention removes the loss spikes seen at step 2k."
+
+# What was run. How it is launched (container, scheduler, shell) is the agent's choice.
+command: "uv run python train.py --config configs/r001.yaml"
+
+# Where the run's parameters are authoritative: git | tracker | mixed.
+# params_path is required for git and mixed and names a file in the source commit.
+params_source: git
+params_path: experiments/exp-023-normalization-instability/configs/r001.yaml
+
+# Every external input the run reads, declared before the start. The version is an
+# immutable content identifier (commit hash, sha256, manifest digest); "latest", a date or
+# a branch name is rejected. A neutral alias is fine for source when the real location
+# must stay private; path is where the input sits locally (.local/data/<name>, holding a
+# VERSION marker with the same version string).
+data:
+  - name: food101-subset
+    source: "https://huggingface.co/datasets/ethz/food101"
+    version: "sha256:9f2c0e4d6b7a8c1d2e3f4a5b6c7d8e9f0a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d"
+    path: .local/data/food101-subset
+
+# Requested resources: accelerator cpu | gpu, and how many. Unavailable means the run
+# does not start and the reason is reported; it never falls back to another accelerator.
+resources:
+  accelerator: gpu
+  count: 1
+
+# ISO-8601 duration; cumulative over resumptions. Exceeding it ends the run as aborted.
+max_duration: "PT2H"
+
+# How the environment is fixed: the image definition, the experiment's lock, and the
+# frozen hashed manifest exported for this run and committed with the record.
+environment:
+  dockerfile: experiments/exp-023-normalization-instability/Dockerfile
+  lockfile: experiments/exp-023-normalization-instability/uv.lock
+  requirements: experiments/exp-023-normalization-instability/runs/R001.requirements.txt
+
+# Reservation in the spec's unit; counted until an outcome is written. Omit the whole
+# block when the spec has no budget block (the Epic says "unlimited").
+budget:
+  reserved: 0.2
+
+# sha256 of specs/<id>/spec.md at the source commit: which spec version this run answers.
+spec_digest: "sha256:3c1f8a0b7d4e5f6a9b8c7d6e5f4a3b2c1d0e9f8a7b6c5d4e3f2a1b0c9d8e7f6a"
+
+# Tracker reference: project = experiment ID, run = this run ID. The tracker run's config
+# carries formal_run "<exp-id>/R###" and source_commit "<sha>".
+tracker:
+  project: exp-023-normalization-instability
+  run: R001
+
+# ---- Execution fields: written once, after the run. They stay commented out until then,
+# ---- so a copied record has no outcome before the start.
+
+# completed | failed | aborted. Exceeding max_duration => aborted; never-started => aborted.
+# outcome: completed
+
+# Free text locating the execution: container id, job id, ...
+# execution_ref: "docker:sha256:5d7a1c3e9b2f4a6c8e0d2f4a6c8e0d2f4a6c8e0d2f4a6c8e0d2f4a6c8e0d2f4a"
+
+# Required when failed or aborted; empty otherwise.
+# failure_reason: ""
+
+# In the spec's unit. Failed and aborted runs record what they consumed; never-started = 0.
+# From here on the budget counts actual_usage instead of reserved.
+# actual_usage: 0.11
+
+# Times the run resumed from its own checkpoint (same source commit, same environment).
+# interruptions: 0
