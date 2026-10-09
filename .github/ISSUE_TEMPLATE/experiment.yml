@@ -1,0 +1,41 @@
+name: Experiment
+description: One experiment under a published Epic. The issue number becomes the experiment ID (exp-NNN-<slug>).
+title: "Experiment: "
+labels: ["experiment"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Attach this issue to its Epic as a sub-issue after creation (the "Parent Epic" field below is the
+        fallback when that has not happened yet). The experiment ID is `exp-NNN-<slug>`, NNN being this
+        issue's number zero-padded to three digits.
+  - type: textarea
+    id: goal
+    attributes:
+      label: Goal
+      description: The concrete question this experiment answers.
+    validations:
+      required: true
+  - type: textarea
+    id: why
+    attributes:
+      label: Why it belongs to the Epic
+      description: How the goal serves the Epic's objective and stays inside its scope and constraints.
+    validations:
+      required: true
+  - type: input
+    id: allotment
+    attributes:
+      label: Planned allotment
+      description: Share of the Epic's budget planned for this experiment, in the Epic's unit. The binding limit in the spec cannot exceed it. Write "unlimited" when the Epic says so.
+      placeholder: "0.5"
+    validations:
+      required: true
+  - type: input
+    id: epic
+    attributes:
+      label: Parent Epic number
+      description: Issue number of the published Epic this experiment belongs to.
+      placeholder: "12"
+    validations:
+      required: true

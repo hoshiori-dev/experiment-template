@@ -1,0 +1,50 @@
+name: Epic
+description: One round of research. A maintainer publishes it by adding the label epic:approved after creation.
+title: "Epic: "
+labels: ["epic"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        An Epic is published when a maintainer adds the label `epic:approved` after the issue exists.
+        After publication the body is frozen: put corrections and additions in comments.
+        Editing the body invalidates the approval until a maintainer re-adds the label.
+  - type: textarea
+    id: objective
+    attributes:
+      label: Objective
+      description: What this round must find out, and why now.
+    validations:
+      required: true
+  - type: textarea
+    id: scope
+    attributes:
+      label: Scope
+      description: Which experiments belong to this Epic and which are explicitly out. Written so that an approver can decide whether a proposed experiment is in scope.
+    validations:
+      required: true
+  - type: textarea
+    id: constraints
+    attributes:
+      label: Constraints
+      description: Data, models, protocols and comparison rules every experiment follows, including the allowed data sources and licence range. Inputs inside this range need no further permission.
+    validations:
+      required: true
+  - type: textarea
+    id: budget
+    attributes:
+      label: Budget policy
+      description: 'Unit, total for the Epic, and the allotment per experiment. Required even when resources are free: write "unlimited" instead of leaving it blank.'
+      placeholder: |
+        unit: gpu-hours
+        total: 2
+        per-experiment: 0.5
+    validations:
+      required: true
+  - type: textarea
+    id: exit
+    attributes:
+      label: Exit criteria
+      description: "What has to be in hand before synthesis starts. Required, because without it the agent cannot tell when to stop opening experiments."
+    validations:
+      required: true

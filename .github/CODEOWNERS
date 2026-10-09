@@ -1,0 +1,40 @@
+# THE list of protected paths; every other file points here instead of repeating it.
+# Protected paths: the shared part of the repository. Changes here are merged by a human
+# after a code-owner review; an agent prepares them on a branch. Replace @ryan-minato with
+# the maintainer's handle when adapting the template, and enable "Require review from
+# Code Owners" in the branch protection of main.
+
+# Accepted experimental knowledge (enters only through an accepted synthesis)
+/docs/ @ryan-minato
+
+# Shared libraries
+/packages/ @ryan-minato
+
+# Harness: agent entry points, knowledge, skills, framework configs and permission tables
+/AGENTS.md @ryan-minato
+/CLAUDE.md @ryan-minato
+/.agents/ @ryan-minato
+/.claude/ @ryan-minato
+/.codex/ @ryan-minato
+/opencode.json @ryan-minato
+/speckit/ @ryan-minato
+/.specify/ @ryan-minato
+
+# Harness: tools and checks
+/justfile @ryan-minato
+/scripts/ @ryan-minato
+/.pre-commit-config.yaml @ryan-minato
+/.gitleaks.toml @ryan-minato
+/pyproject.toml @ryan-minato
+/uv.lock @ryan-minato
+/deno.json @ryan-minato
+/.editorconfig @ryan-minato
+/.gitattributes @ryan-minato
+/.gitignore @ryan-minato
+/.devcontainer/ @ryan-minato
+/.github/ @ryan-minato
+/template/ @ryan-minato
+
+# Deliverables for people: merged by a human, appear at report time
+/reports/ @ryan-minato
+/demos/ @ryan-minato

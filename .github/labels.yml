@@ -1,0 +1,17 @@
+# Labels the harness scripts read. Synced by .github/workflows/labels.yml
+# (crazy-max/ghaction-github-labeler). Colors are hex without "#".
+- name: "epic"
+  color: "5319e7"
+  description: "One round of research: objective, scope, constraints, budget policy"
+- name: "epic:approved"
+  color: "0e8a16"
+  description: "Published by a maintainer; body frozen; experiments may start"
+- name: "experiment"
+  color: "1d76db"
+  description: "One experiment under an Epic; the issue number is the experiment ID"
+- name: "spec:approved"
+  color: "0e8a16"
+  description: "The spec at this PR's head is approved; formal runs may start"
+- name: "synthesis"
+  color: "fbca04"
+  description: "Proposed change to accepted experimental knowledge in docs/"
