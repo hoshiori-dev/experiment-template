@@ -39,9 +39,10 @@ whether deeper adaptation is worth its cost on this task.
 - Model: torchvision ResNet-18 with the `IMAGENET1K_V1` weights, file `resnet18-f37072fd.pth`, the second allowed input.
   Each run record declares the file's full SHA-256, which begins with `f37072fd`.
 - Protocol: both arms use the same training images, the same tuning split, the same test images, the same input size,
-  the same number of epochs, the same learning-rate grid and the same seeds. The learning rate is the only tuned
-  hyperparameter and is selected per arm on the tuning split. Each arm is trained with at least three seeds. The metric
-  is top-1 accuracy on the test images.
+  the same number of epochs, the same learning-rate grid and the same seeds. The tuning split is held out from the
+  training subset: its images are never trained on. The learning rate is the only tuned hyperparameter and is selected
+  per arm on the tuning split. Each arm is trained with at least three seeds. The metric is top-1 accuracy on the test
+  images.
 - Comparison rules: an arm's result is the mean and the standard deviation of its test accuracy over the seeds, at the
   learning rate selected on the tuning split. Arms are compared only through the rule in "Completion criteria".
 - Held-out data protection: the test images take no part in training or in model selection. The design file (subset
