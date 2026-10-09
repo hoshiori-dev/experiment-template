@@ -90,6 +90,8 @@ def test_author_address(monkeypatch):
 
 def test_author_from_git_var(monkeypatch, repo):
     monkeypatch.delenv("GIT_AUTHOR_EMAIL")
+    # git var needs a name as well; a CI runner has no global identity to fall back on.
+    repo.git("config", "user.name", "Ada")
     repo.git("config", "user.email", f"ada{AT}example.com")
     assert "not a platform noreply address" in ccm.check_author("msg")[0]
 
