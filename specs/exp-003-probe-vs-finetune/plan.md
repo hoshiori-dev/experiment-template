@@ -11,8 +11,10 @@ by informal sizing runs that skip test evaluation, so that one Formal Run coveri
 budget. First write and commit the design file (manifest, split, epochs, grid, seeds); only then run anything that
 touches test images.
 
-Starting point for the design, to be settled by sizing: about 100 training images per class with a fifth held out for
-tuning, about 50 test images per class, a small learning-rate grid, three seeds.
+Sizing settled the design: 80 fit, 20 tuning and 50 test images per class, 10 epochs, batch size 128, learning rates
+0.001 to 0.3 in six steps, seeds 0 to 2. The whole grid for both arms takes about five minutes on one GPU. The first
+grid (0.0001 to 0.03) put both arms' best tuning accuracy at its top edge, so it was moved up until the best value sat
+inside it; only tuning-split numbers were used for that.
 
 ## Candidate runs
 
@@ -21,7 +23,7 @@ candidate becomes a Formal Run through `/speckit-research-run`; informal runs ne
 
 | Candidate                  | Decides                                   | Rough cost | Status     |
 | -------------------------- | ----------------------------------------- | ---------- | ---------- |
-| both arms, grid, 3 seeds   | the question, by the spec's decision rule | 0.2        | considered |
+| both arms, grid, 3 seeds   | the question, by the spec's decision rule | 0.1        | next       |
 | repeat with two more seeds | the question, if the first is borderline  | 0.15       | considered |
 
 ## What would change the plan
