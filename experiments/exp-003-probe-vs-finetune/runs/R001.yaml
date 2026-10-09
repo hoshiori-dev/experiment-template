@@ -27,3 +27,8 @@ spec_digest: "sha256:17923a0d10628fa49190d1c6a6e5190b6c93fc3573ad12926ed335748fc
 tracker:
   project: exp-003-probe-vs-finetune
   run: R001
+outcome: completed
+execution_ref: "docker image sha256:2e9a18c6944283135c888db5e19a7b21faf0ccc2cae98583b7da9030bbac6b17, container exp-003-R001"
+failure_reason: ""
+actual_usage: 0.091
+interruptions: 0
