@@ -1,6 +1,6 @@
 ---
 description: Iterate the Experiment - explore freely inside its two directories, keep the ledger, stop at the fence.
-argument-hint: "Optional focus for this iteration"
+argument-hint: "Experiment ID (defaults to the current branch), then an optional focus for this iteration"
 ---
 
 ## User Input
@@ -19,8 +19,10 @@ first run that should count; read `.agents/knowledge/governance.md` for the stop
 
 ## Steps
 
-1. **Locate and check.** Resolve `<id>` from `SPECIFY_FEATURE_DIRECTORY`, `.specify/feature.json` or the branch name
-   (`exp-NNN-*`); confirm `git branch --show-current` is `<id>`. Run `just spec-approval <id>`: exit 0 continues; exit 1
+1. **Locate and check.** `<id>` is the first word of `$ARGUMENTS` when it has the form `exp-NNN-<slug>`; when it is left
+   out, `<id>` is the current branch name, which must then be `exp-NNN-<slug>`. An `<id>` given as an argument must
+   equal the current branch; when they differ, or the branch is not an Experiment branch and no `<id>` was given, stop
+   and report without changing a file. No pointer file is read. Run `just spec-approval <id>`: exit 0 continues; exit 1
    means the spec has no valid approval and the Experiment waits for the human; exit 2 means the platform is
    unreachable, so informal work may continue but no Formal Run starts. Run `just budget <id>` to know the remaining
    budget. Done when: branch, approval state and remaining budget are known.

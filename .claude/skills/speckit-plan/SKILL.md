@@ -6,7 +6,8 @@ compatibility: Requires spec-kit project structure with .specify/ directory
 metadata:
   author: github-spec-kit
   source: preset:research
-argument-hint: Optional notes on the strategy to plan
+argument-hint: Experiment ID (defaults to the current branch), then optional notes
+  on the strategy
 user-invocable: true
 disable-model-invocation: false
 ---
@@ -28,9 +29,10 @@ reported to the human instead, because any spec edit invalidates approval.
 
 ## Steps
 
-1. **Locate the Experiment.** Use `SPECIFY_FEATURE_DIRECTORY` when set, otherwise `feature_directory` from
-   `.specify/feature.json`, otherwise the current branch name when it matches `exp-NNN-*` (then also write
-   `.specify/feature.json`). When none of these yields a `specs/<id>/` directory, stop and ask which Experiment. Done
+1. **Locate the Experiment.** `<id>` is the first word of `$ARGUMENTS` when it has the form
+   `exp-NNN-<slug>`; when it is left out, `<id>` is the current branch name, which must then be `exp-NNN-<slug>`. An
+   `<id>` given as an argument must equal the current branch; when they differ, or the branch is not an Experiment
+   branch and no `<id>` was given, stop and report without changing a file. No pointer file is read. Done
    when: `specs/<id>/spec.md` is readable.
 
 2. **Read the fence.** Read `specs/<id>/spec.md` in full, then `specs/<id>/tasks.md` and the run records under

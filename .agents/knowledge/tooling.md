@@ -42,9 +42,11 @@ Kit-managed copies (`deno.json`). The charter is `.specify/memory/constitution.m
 | `speckit.research.synthesize`  | extension       | synthesize an Epic from the rendezvous                              |
 | `speckit.research.status`      | extension       | show research status (read-only)                                    |
 
-All three frameworks address them as `/speckit-research-run` (dots become hyphens in skill names). Spec Kit scripts find
-the feature directory through `SPECIFY_FEATURE_DIRECTORY` or `.specify/feature.json` (gitignored), not the branch name.
-`SPECKIT_PYTHON_EXECUTABLE` points at the root `.venv` python so template resolution has PyYAML.
+All three frameworks address them as `/speckit-research-run` (dots become hyphens in skill names). The research commands
+take the Experiment ID as their first argument, defaulting to the current branch name, and stop when the two differ;
+they neither read nor write `.specify/feature.json`. That file is Spec Kit's own per-checkout pointer (gitignored); only
+upstream scripts that this repository does not call use it. `SPECKIT_PYTHON_EXECUTABLE` points at the root `.venv`
+python so template resolution has PyYAML.
 
 ## just recipes and scripts
 

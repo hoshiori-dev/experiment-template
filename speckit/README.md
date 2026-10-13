@@ -15,8 +15,8 @@ the files and the commands is the project's own and lives here.
 ## Installed copies
 
 `.specify/` holds the installed copies (`.specify/presets/research/`, `.specify/extensions/research/`) and is committed,
-so a fresh checkout needs no install. Only `.specify/feature.json`, the per-checkout pointer to the current experiment,
-stays out of Git.
+so a fresh checkout needs no install. `.specify/feature.json`, Spec Kit's per-checkout pointer to a current feature,
+stays out of Git and is not used by these commands: they take the Experiment ID as an argument or from the branch name.
 
 Spec Kit installs one agent integration, Claude: every command is materialized as `.claude/skills/speckit-*/SKILL.md`
 (dots in command names become hyphens, so `speckit.research.run` is `/speckit-research-run`). Codex reads

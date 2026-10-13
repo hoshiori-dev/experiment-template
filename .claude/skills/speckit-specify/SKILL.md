@@ -46,9 +46,8 @@ stopping rules this command enforces.
    to it. Done when: the ID is unique.
 
 5. **Branch and directories.** From a clean working tree: `git switch -c <id> main`,
-   `mkdir -p specs/<id>
-   experiments/<id>`, and write `.specify/feature.json` with content
-   `{"feature_directory": "specs/<id>"}`. Done when: `git branch --show-current` prints `<id>`.
+   `mkdir -p specs/<id> experiments/<id>`. Later commands find the Experiment from their `<id>` argument or the branch
+   name; nothing is written under `.specify/`. Done when: `git branch --show-current` prints `<id>`.
 
 6. **Spec, plan, tasks.** Resolve each template with `.specify/scripts/bash/resolve-template.sh <name>` for
    `spec-template`, `plan-template`, `tasks-template` (it returns the preset's replacement); when the script fails, copy
