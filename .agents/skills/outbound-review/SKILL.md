@@ -1,11 +1,13 @@
 ---
 name: outbound-review
 description: >
-  Reviews content before it leaves this machine: commits about to be pushed, issue and pull request text, comments,
-  result files copied into an experiment, images or tracker data about to be synced. Use before any push, before
-  handing a draft in .local/drafts/ to a human, and whenever the publishing knowledge or a procedure says
-  "outbound review". Runs the mechanical scan, then reads the content for the five forbidden classes and for leaks a
-  scanner cannot see, and reports findings by type and location only.
+  The step-by-step procedure for sending anything off this machine. Load it at the start of any task that will push
+  a branch (git push), open or update a pull request or an issue, post a comment, hand a draft in .local/drafts/ to
+  a human, copy result files into an experiment, or sync an image or tracker data; when asked whether a text is safe
+  to publish; and whenever the publishing knowledge or a procedure says "outbound review". Load it even after
+  reading the publishing knowledge: that file states the standard, this skill is how the review is done (scope what
+  leaves, mechanical scan, full read-through for the five forbidden classes, report by type and location, rewrite,
+  hold). Not for running formatters or tests, reviewing code quality, or read-only status queries.
 license: MIT
 compatibility: Requires gitleaks through the repository's just recipes and a git working tree.
 ---
