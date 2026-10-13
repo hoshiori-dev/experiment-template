@@ -9,9 +9,11 @@
 # (`just run <R###> ...` in this directory extracts it with git archive and builds); for
 # informal runs, the working tree (`just build`).
 
-# Keep the base image and the uv release as the starter has them unless the plan says why:
-# every layer below is shared between Experiments only while these lines are the same.
-FROM python:3.12-slim
+# Base image, pinned by digest (python:3.12-slim as of the project baseline): a tag can move,
+# a digest cannot. Keep this line and the uv release as the starter has them unless the plan
+# says why: every layer below is shared between Experiments only while they are the same.
+# Moving the baseline to a newer image is a preparation change.
+FROM python:3.12-slim@sha256:05cda9777409a9c3ffddd94a4c476b79f0769a0b4857f0c7ed9226b6800b0d6f
 
 # uv, pinned to a release (or a digest, for stricter reproducibility).
 COPY --from=ghcr.io/astral-sh/uv:0.12.23 /uv /uvx /bin/
