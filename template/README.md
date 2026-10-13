@@ -9,7 +9,7 @@ long as the boundaries still hold. Container and lock-file mechanics in it are t
 
 1. Have an experiment issue under a published Epic. Its number gives the ID `exp-NNN-<slug>` (NNN zero-padded to three
    digits, slug two to four lowercase words joined by `-`).
-2. Copy the starter: `cp -r template/experiment experiments/<id>`. The spec, plan and tasks go to `specs/<id>/` (the
+2. Copy the starter: `cp -r template/experiment/. experiments/<id>/`. The spec, plan and tasks go to `specs/<id>/` (the
    Spec Kit research commands create them).
 3. Rename: `name` in `experiments/<id>/pyproject.toml`, and the title line of `experiments/<id>/README.md`.
 4. Keep `pyproject.toml`, `uv.lock` and `requirements.txt` as copied: they are the project's dependency baseline, and

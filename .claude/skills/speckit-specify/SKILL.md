@@ -22,7 +22,8 @@ $ARGUMENTS
 ## Role and goal
 
 You open one Experiment for one experiment issue. Done means: the branch `<id>` exists with `specs/<id>/spec.md`,
-`specs/<id>/plan.md`, `specs/<id>/tasks.md` and `experiments/<id>/README.md` committed, and the pull request body is
+`specs/<id>/plan.md`, `specs/<id>/tasks.md` and the starter files under `experiments/<id>/` (README included)
+committed, and the pull request body is
 ready for the human. Read `.agents/knowledge/governance.md` first: it holds the governance model, the two gates and the
 stopping rules this command enforces.
 
@@ -58,9 +59,13 @@ stopping rules this command enforces.
    section as `OPEN: ...` so the reviewer resolves it before approval; invent nothing, and never a budget number. Done
    when: every template heading is present and no `exp-NNN-slug` placeholder remains.
 
-7. **Experiment README.** Copy `template/experiment/README.md` to `experiments/<id>/README.md`, set the title to `<id>`
-   and the status line to `in progress`, fill `Question` from the spec and leave the other sections with their template
-   text. Done when: the README names the question and the six fixed sections exist.
+7. **Experiment directory.** Copy the whole starter: `cp -r template/experiment/. experiments/<id>/`. It brings the
+   project baseline (`pyproject.toml`, `uv.lock`, `requirements.txt`) and the example `Dockerfile` and `justfile`; keep
+   the baseline as copied unless the plan says why (`.agents/knowledge/evidence.md`, Environment). Set `name` in
+   `experiments/<id>/pyproject.toml` to `<id>` and run `uv lock --project experiments/<id>`, which rewrites only the
+   project's own entry. In `experiments/<id>/README.md` set the title to `<id>` and the status line to `in progress`,
+   fill `Question` from the spec and leave the other sections with their template text. Done when: the README names the
+   question, the six fixed sections exist, and `uv lock --check --project experiments/<id>` passes.
 
 8. **Commit.** `git add specs/<id> experiments/<id>` and commit with the title `exp-NNN: open experiment`. The
    commit-msg hook rejects attribution trailers and non-noreply author addresses; fix the cause when it fails, never

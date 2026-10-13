@@ -51,12 +51,12 @@ the runtime boundaries. The annotated record is `template/run-record.yaml`.
 5. **Source commit.** Run `just epic-status P` first: exit 0 continues; exit 1 (invalid Epic) stops the Experiment
    (`/speckit-implement` Stopping) before any commit; exit 2 (platform unreachable) waits and retries. Then
    `git add experiments/<id>/runs/R###.yaml`, plus `experiments/<id>/requirements.txt` when it changed and any input
-   specific to this run (configs, split files), and commit with title `exp-NNN: run R### source`. This is the only commit on
-   the run branch before the start; while nothing has started, amend it or recreate the branch under the same number
-   when inputs change. Then run `just preflight <id> R###`, which checks the start conditions including spec approval
-   and Epic validity (add `--skip-platform` only when the platform is unreachable and approval and Epic were verified
-   earlier in this session). Every failure names what to fix; fix it in the source commit and run the preflight again.
-   Done when: `just epic-status P` and `just preflight <id> R###` both exit 0.
+   specific to this run (configs, split files), and commit with title `exp-NNN: run R### source`. This is the only
+   commit on the run branch before the start; while nothing has started, amend it or recreate the branch under the same
+   number when inputs change. Then run `just preflight <id> R###`, which checks the start conditions including spec
+   approval and Epic validity (add `--skip-platform` only when the platform is unreachable and approval and Epic were
+   verified earlier in this session). Every failure names what to fix; fix it in the source commit and run the preflight
+   again. Done when: `just epic-status P` and `just preflight <id> R###` both exit 0.
 
 6. **Run.** Immediately before launch, run `just epic-status P` and `just preflight <id> R###` once more; an invalid
    Epic or a failed preflight stops the launch, and nothing starts until both exit 0. Only the source commit's content
@@ -74,9 +74,9 @@ the runtime boundaries. The annotated record is `template/run-record.yaml`.
    `execution_ref`, `failure_reason` (empty unless failed or aborted), `actual_usage` in the spec's unit (what was
    consumed, even on failure; a run that never started records 0 and `aborted`), `interruptions`. Copy the small result
    files the README will cite into `experiments/<id>/` (never raw logs, checkpoints or data). Commit with title
-   `exp-NNN: record R### <outcome>`. `just tracker <id> R###` prints the tracker record (config and metrics summary) for the
-   `execution_ref` and the numbers the README will quote; `just source-commit <id> R### --verify-tracker` confirms the
-   tracker's `source_commit` equals the commit that added the record. Done when: `just validate-records` passes, the
+   `exp-NNN: record R### <outcome>`. `just tracker <id> R###` prints the tracker record (config and metrics summary) for
+   the `execution_ref` and the numbers the README will quote; `just source-commit <id> R### --verify-tracker` confirms
+   the tracker's `source_commit` equals the commit that added the record. Done when: `just validate-records` passes, the
    verification prints a match, and the run branch has exactly two commits beyond `<id>`.
 
 8. **Merge back.** `git switch <id>` then `git merge --no-ff run/<id>/R###`; the merge commit keeps the branch structure
