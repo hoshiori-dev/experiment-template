@@ -137,36 +137,55 @@ installed with `--require-hashes` into a venv named after the manifest's digest 
 `.local/envs/<first 12 hex of its sha256>/`), created once, reused by every run with that manifest, and never modified
 afterwards; a changed manifest gets a new venv.
 
-ML example (`template/experiment/` is the starter): the Experiment has its own `Dockerfile`, `pyproject.toml` and
-`uv.lock`; shared libraries are path dependencies `{ path = "../../packages/<lib>", editable = false }`; the base image
-is pinned to a digest or explicit tag. Export per run, from the Experiment directory:
+Default image, as a template (`template/experiment/Dockerfile` is the same shape; any image that keeps the boundaries is
+fine). Two steps, in this order:
+
+```dockerfile
+FROM <base image, pinned>
+# installer, pinned
+
+# 1. Dependencies. Only the frozen manifest is visible here; install it for the environment the run needs.
+RUN --mount=<manifest> --mount=<installer cache> \
+    uv pip install --system --require-hashes --no-deps --torch-backend=cuXXX -r <manifest>
+
+# 2. Source. The only step whose input changes from one round to the next.
+COPY . /app/
+```
+
+Why this order: across the rounds of an Experiment, and across Experiments on the same baseline, nothing step 1 reads
+changes, so everything up to and including the dependencies comes from the build cache and a rebuild only copies the
+source. Whatever would change per run (run ID, source commit, the source tree) stays out of step 1; a build argument in
+scope of the install step counts, because its value is part of that step's cache key. Check once per Experiment: a
+second build with another run ID and an unchanged manifest reports the install step as `CACHED`.
+
+Fitting the environment: a run that needs a GPU names its accelerator backend exactly, `--torch-backend=cuXXX` for
+PyTorch (`cpu` for a CPU run), chosen to match the driver of the machine that executes the run. Never `auto` and never
+the installer's default: both are decided by the machine that builds, which may have no GPU, and the result is a silent
+change of backend (see No silent degradation). The first thing the run does is fail if the requested accelerator does
+not start. A project without PyTorch drops the option.
+
+Freezing the manifest (per run, from the Experiment directory). The backend is part of what is frozen, because the same
+version has different files and hashes per backend; the manifest is compiled with the same option the image installs
+with, constrained to the versions in the lock:
+
+```sh
+uv export --format requirements.txt --locked --no-dev --no-emit-project --no-emit-local --no-hashes -o /tmp/pins.txt
+uv pip compile pyproject.toml --constraint /tmp/pins.txt --torch-backend=cuXXX --generate-hashes --no-header --no-annotate -o runs/R###.requirements.txt
+```
+
+Without PyTorch one command is enough:
 
 ```sh
 uv export --format requirements.txt --locked --no-dev --no-emit-project --no-emit-local --no-header --no-annotate -o runs/R###.requirements.txt
 ```
 
 `--no-header` and `--no-annotate` drop the comments that repeat the command line and the project name, so manifests of
-the same dependencies are byte-identical across runs and Experiments. `--no-emit-local` drops path dependencies because
-they export without hashes; build shared libraries as wheels with `uv build --package <lib>` from the root and install
-them separately. In the image, the run ID stays in a stage of its own (a build argument in scope of a `RUN` rebuilds
-that layer whenever its value changes), the manifest is mounted, and the source is copied last:
-
-```dockerfile
-FROM scratch AS manifest
-ARG RUN_ID
-COPY runs/${RUN_ID}.requirements.txt /requirements.txt
-
-FROM python:3.12-slim
-COPY --from=ghcr.io/astral-sh/uv:0.12.23 /uv /uvx /bin/
-ENV UV_LINK_MODE=copy UV_CACHE_DIR=/var/cache/uv
-RUN --mount=type=bind,from=manifest,source=/requirements.txt,target=/tmp/requirements.txt \
-    --mount=type=cache,target=/var/cache/uv \
-    uv pip install --system --require-hashes --no-deps -r /tmp/requirements.txt
-COPY . /app/
-```
-
-Check it once per Experiment: a second build with another run ID and an unchanged manifest reports the install step as
-`CACHED`.
+the same dependencies are byte-identical across runs and Experiments and share one installed layer. A manifest frozen
+for one backend installs only with that backend: without the option, or with another, the install fails on a missing
+version or a hash mismatch, which is the intended result. Shared libraries are path dependencies
+`{ path = "../../packages/<lib>", editable = false }`; they are left out of the manifest (`--no-emit-local`, they carry
+no hash), built as wheels with `uv build --package <lib>` from the root, and installed in a step of their own between
+the two above.
 
 ## Data and external inputs
 

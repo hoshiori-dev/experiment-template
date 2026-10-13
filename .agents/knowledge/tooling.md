@@ -171,9 +171,10 @@ Experiment and synthesis PRs are merged with merge commits so `Merge pull reques
 ## Skills
 
 Project skills live in `.agents/skills/<name>/` (`.claude/skills/` links to them). A skill loads because its description
-matches the task at hand; no harness file names a skill or points to its path, so a description is the only trigger and
-has to carry it: what the skill does, the situations and the wording that call for it, and what it is not for. Harness
-files describe the activity in plain words (for example "the outbound review") and leave the loading to the description.
+matches the task at hand; no harness file names a skill or points to its path (the `/speckit-*` commands are procedures
+invoked by name and are the exception), so a description is the only trigger and has to carry it: what the skill does,
+the situations and the wording that call for it, and what it is not for. Harness files describe the activity in plain
+words (for example "the outbound review") and leave the loading to the description.
 
 A new or changed description is checked with trigger tests before it is merged. The cases are in the skill's
 `evals/triggers.md`: prompts that should load it and near-misses that share its vocabulary and should not, each with the

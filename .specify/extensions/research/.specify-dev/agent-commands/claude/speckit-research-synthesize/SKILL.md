@@ -52,8 +52,8 @@ The proposal becomes knowledge only when a human merges it (the Acceptance Gate)
 
 7. **Harness check-up, separately.** Run the periodic entropy check of the harness that belongs to the rendezvous. Its
    findings go to a dated note under `.local/drafts/` and its proposed fixes to a branch of their own, never to
-   `synthesis/E`: harness changes are their own branch and their own
-   review. Done when: the note exists, even when it reports nothing to change.
+   `synthesis/E`: harness changes are their own branch and their own review. Done when: the note exists, even when it
+   reports nothing to change.
 
 ## Hand-over
 

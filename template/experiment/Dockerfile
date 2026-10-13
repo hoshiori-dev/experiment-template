@@ -22,10 +22,15 @@ FROM python:3.12-slim
 # uv, pinned to a release (or a digest, for stricter reproducibility).
 COPY --from=ghcr.io/astral-sh/uv:0.12.23 /uv /uvx /bin/
 
-# Dependencies before source. The manifest is mounted, not copied, so the layer is reused
-# by every run and every Experiment whose manifest has the same content; the cache mount
-# keeps downloaded wheels when the manifest does change. --require-hashes rejects any line
-# without a hash; --no-deps installs the manifest as is.
+# Step 1: dependencies. Only the frozen manifest is visible here (mounted, not copied), so
+# this layer is reused by every run and every Experiment whose manifest has the same
+# content; the cache mount keeps downloaded wheels when the manifest does change.
+# --require-hashes rejects any line without a hash; --no-deps installs the manifest as is.
+#
+# With PyTorch, name the accelerator backend exactly and freeze the manifest with the same
+# option (.agents/knowledge/evidence.md, Environment): add --torch-backend=cuXXX matching
+# the driver of the machine that runs, or --torch-backend=cpu. Never auto: it is decided by
+# the machine that builds.
 ENV UV_LINK_MODE=copy UV_CACHE_DIR=/var/cache/uv
 RUN --mount=type=bind,from=manifest,source=/requirements.txt,target=/tmp/requirements.txt \
     --mount=type=cache,target=/var/cache/uv \
@@ -35,8 +40,8 @@ RUN --mount=type=bind,from=manifest,source=/requirements.txt,target=/tmp/require
 # COPY wheels/ /tmp/wheels/
 # RUN uv pip install --system --no-deps /tmp/wheels/*.whl
 
-# Source last: the experiment directory at the source commit. Editing code or adding a
-# run record rebuilds from here only.
+# Step 2: source, the experiment directory at the source commit. From one round to the
+# next this is the only step whose input changes, so a rebuild starts here.
 WORKDIR /app
 COPY . /app/
 

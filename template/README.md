@@ -41,7 +41,7 @@ for them.
 A run lives on branch `run/<id>/R###`, cut from the experiment branch. Its first commit (the source commit) adds the
 record, the frozen manifest and run-specific inputs; nothing else is committed before the run starts. After the run,
 append the outcome fields and the result files, then merge the run branch back with a merge commit. Freeze the manifest
-from the experiment's lock, for example:
+from the experiment's lock, for example (without PyTorch):
 
 ```sh
 uv export --format requirements.txt --locked --no-dev --no-emit-project --no-emit-local --no-header --no-annotate -o runs/R001.requirements.txt
@@ -50,4 +50,6 @@ uv export --format requirements.txt --locked --no-dev --no-emit-project --no-emi
 `--no-header` and `--no-annotate` leave out the comments that repeat the command and the project name, so manifests of
 the same dependencies are byte-identical across runs and Experiments; `--no-emit-local` drops path dependencies (they
 carry no hash); build shared libraries as wheels with `uv build --package <lib>` from the root and install them
-separately. `just preflight <id> R001` checks the start conditions that a machine can check.
+separately. With PyTorch, the manifest is compiled for one exact accelerator backend and the image installs with the
+same `--torch-backend=cuXXX`; the two commands are in `.agents/knowledge/evidence.md` (Environment).
+`just preflight <id> R001` checks the start conditions that a machine can check.

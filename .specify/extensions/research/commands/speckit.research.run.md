@@ -38,9 +38,9 @@ the runtime boundaries. The annotated record is `template/run-record.yaml`.
    `latest`, a date or a branch. Done when: `just validate-records` passes on the new file.
 
 4. **Freeze the environment.** Machine-learning example: `experiments/<id>/` has its own `pyproject.toml`, `uv.lock` and
-   `Dockerfile` with a pinned base image; inside `experiments/<id>/`, export the hashed manifest:
-   `uv export --format requirements.txt --locked --no-dev --no-emit-project --no-emit-local --no-header --no-annotate
-   -o runs/R###.requirements.txt`.
+   `Dockerfile` with a pinned base image; inside `experiments/<id>/`, freeze the hashed manifest to
+   `runs/R###.requirements.txt` with the commands in `.agents/knowledge/evidence.md` (Environment); a run on a GPU
+   freezes and installs with the same exact accelerator backend (`--torch-backend=cuXXX`), never `auto`.
    A manifest that differs from the previous run's, or from the baseline's, needs a reason in the plan; without one,
    restore the lock first (`.agents/knowledge/evidence.md`, Environment). The environment is installed once per
    manifest: build or reuse it so that an unchanged manifest installs nothing. Any other kind of experiment records
