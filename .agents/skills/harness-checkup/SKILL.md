@@ -34,7 +34,8 @@ synthesis branch, or on any experiment branch.
    `AGENTS.md` or by another file `AGENTS.md` reaches. List the files no pointer reaches and the pointers whose trigger
    is vague ("see X for details"). Skills are the opposite case: they load by description alone, so list every place
    outside a skill's own directory that names a project skill or its path, and every skill written for this repository (not the ones `skills-lock.json` lists as installed, not the
-   `speckit-*` commands) whose `evals/triggers.md` is missing or older than its description (`git log -1` on both).
+   `speckit-*` commands) whose `evals/triggers.md` is missing, or whose description changed in a commit that left that file untouched
+   (`git log -p -- <skill>/SKILL.md`, the `description` lines only; edits to the body do not count).
 6. **Rules without a check.** For each rule in the knowledge files that a script or hook could verify mechanically (path
    shape, enum values, branch scope, required fields, naming), check whether one exists in `scripts/` or
    `.pre-commit-config.yaml`. List the candidates with the check that would cover them.
