@@ -16,12 +16,14 @@ specify := "uvx --from git+https://github.com/github/spec-kit.git@v1.1.2 specify
 check: lint test validate-records
     deno fmt --check
     just --fmt --check --unstable
+    just --fmt --check --unstable -f template/experiment/justfile
     {{ ruff }} format --check scripts
 
 # Format everything in place.
 fmt:
     deno fmt
     just --fmt --unstable
+    just --fmt --unstable -f template/experiment/justfile
     {{ ruff }} format scripts
     {{ ruff }} check --fix scripts
 
@@ -75,6 +77,33 @@ scan:
 # Source commit of a formal run: just source-commit <exp-id> <R###> [--verify-tracker] [--tracker-root DIR]
 source-commit exp run *args:
     uv run python scripts/source_commit.py "$@"
+
+# Freeze an experiment's hashed manifest to experiments/<exp-id>/requirements.txt: just freeze <exp-id> [torch backend: cuXXX or cpu]
+freeze exp backend="":
+    #!/usr/bin/env bash
+    set -euo pipefail
+    dir="experiments/$1"
+    backend="${2:-}"
+    if [ ! -f "$dir/pyproject.toml" ] || [ ! -f "$dir/uv.lock" ]; then
+        echo "freeze: $dir needs pyproject.toml and uv.lock" >&2
+        exit 2
+    fi
+    if [ "$backend" = "auto" ]; then
+        echo "freeze: name the backend exactly (cuXXX or cpu); auto is decided by this machine" >&2
+        exit 2
+    fi
+    cd "$dir"
+    export="uv export --quiet --format requirements.txt --locked --no-dev --no-emit-project --no-emit-local"
+    if [ -z "$backend" ]; then
+        $export --no-header --no-annotate -o requirements.txt
+    else
+        pins=$(mktemp)
+        trap 'rm -f "$pins"' EXIT
+        $export --no-hashes -o "$pins"
+        uv pip compile --quiet pyproject.toml --constraint "$pins" --torch-backend="$backend" \
+            --generate-hashes --no-header --no-annotate -o requirements.txt
+    fi
+    echo "$dir/requirements.txt sha256:$(sha256sum requirements.txt | cut -d' ' -f1)"
 
 # Tracker runs tagged with a formal run: just tracker <exp-id> <R###> [--tracker-root DIR] [--json]
 tracker exp run *args:

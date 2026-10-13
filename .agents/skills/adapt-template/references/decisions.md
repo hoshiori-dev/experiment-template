@@ -135,7 +135,8 @@ What every Experiment starts from: the dependency declaration and lock, the base
 empty (each Experiment adds what it needs, later ones reuse earlier locks); filled with the project's usual stack
 (Experiments share one installed environment from the first run). Changing a filled baseline later makes new
 Experiments differ from finished ones, which is a variable in every comparison across them.
-Read from: `template/experiment/pyproject.toml`, `template/experiment/uv.lock`, the `FROM` line of
+Read from: `template/experiment/pyproject.toml`, `template/experiment/uv.lock`, `template/experiment/requirements.txt`,
+the `FROM` line of
 `template/experiment/Dockerfile`.
 Stated in: `template/experiment/`, `template/README.md`.
 

@@ -48,23 +48,24 @@ the feature directory through `SPECIFY_FEATURE_DIRECTORY` or `.specify/feature.j
 
 ## just recipes and scripts
 
-| Recipe                            | Script                                                                                         | Exit codes                                         |
-| --------------------------------- | ---------------------------------------------------------------------------------------------- | -------------------------------------------------- |
-| `just check`                      | lint + test + validate-records + `deno fmt --check` + `just --fmt --check` + ruff format check | non-zero on any failure                            |
-| `just fmt`, `just lint`           | ruff format and check, `deno fmt`, `just --fmt` (fmt); ruff check (lint)                       |                                                    |
-| `just test`                       | `uv run pytest scripts/tests`                                                                  |                                                    |
-| `just validate-records`           | `scripts/run_record.py validate <records>`                                                     | non-zero on a schema violation, prints what to fix |
-| `just budget <exp> [--reserve X]` | `scripts/budget.py`                                                                            | non-zero when over limit; `--json`                 |
-| `just preflight <exp> <run>`      | `scripts/run_preflight.py` (`--skip-platform`); includes Epic validity and spec approval       | non-zero on any failed start condition             |
-| `just epic-status <n>`            | `scripts/epic_status.py`                                                                       | 0 valid, 1 invalid (reasons), 2 unreachable        |
-| `just spec-approval <exp>`        | `scripts/spec_approval.py`                                                                     | 0 approved, 1 missing, 2 unreachable               |
-| `just status`                     | `scripts/research_status.py` (git + files only)                                                | read-only                                          |
-| `just source-commit <exp> <run>`  | `scripts/source_commit.py` (`--verify-tracker`)                                                | 1 record never committed; mismatch reported        |
-| `just tracker <exp> <run>`        | `scripts/tracker_lookup.py` (`--json`)                                                         | read-only                                          |
-| `just outbound <paths>`           | `scripts/outbound_check.py`                                                                    | non-zero on findings; rule id + file:line only     |
-| `just scan`                       | `scripts/outbound_check.py` over the working tree as git sees it, with `.gitleaks.toml`        | non-zero on findings                               |
-| `just speckit-install`            | `specify preset add` + `specify extension add` (dev mode)                                      |                                                    |
-| `just skills`                     | `npx skills` via deno                                                                          |                                                    |
+| Recipe                            | Script                                                                                            | Exit codes                                         |
+| --------------------------------- | ------------------------------------------------------------------------------------------------- | -------------------------------------------------- |
+| `just check`                      | lint + test + validate-records + `deno fmt --check` + `just --fmt --check` + ruff format check    | non-zero on any failure                            |
+| `just fmt`, `just lint`           | ruff format and check, `deno fmt`, `just --fmt` (fmt); ruff check (lint)                          |                                                    |
+| `just test`                       | `uv run pytest scripts/tests`                                                                     |                                                    |
+| `just validate-records`           | `scripts/run_record.py validate <records>`                                                        | non-zero on a schema violation, prints what to fix |
+| `just budget <exp> [--reserve X]` | `scripts/budget.py`                                                                               | non-zero when over limit; `--json`                 |
+| `just preflight <exp> <run>`      | `scripts/run_preflight.py` (`--skip-platform`); includes Epic validity and spec approval          | non-zero on any failed start condition             |
+| `just epic-status <n>`            | `scripts/epic_status.py`                                                                          | 0 valid, 1 invalid (reasons), 2 unreachable        |
+| `just spec-approval <exp>`        | `scripts/spec_approval.py`                                                                        | 0 approved, 1 missing, 2 unreachable               |
+| `just status`                     | `scripts/research_status.py` (git + files only)                                                   | read-only                                          |
+| `just source-commit <exp> <run>`  | `scripts/source_commit.py` (`--verify-tracker`)                                                   | 1 record never committed; mismatch reported        |
+| `just freeze <exp> [backend]`     | `uv export` (and `uv pip compile` with a torch backend) into `experiments/<exp>/requirements.txt` | 2 on a missing lock or backend `auto`              |
+| `just tracker <exp> <run>`        | `scripts/tracker_lookup.py` (`--json`)                                                            | read-only                                          |
+| `just outbound <paths>`           | `scripts/outbound_check.py`                                                                       | non-zero on findings; rule id + file:line only     |
+| `just scan`                       | `scripts/outbound_check.py` over the working tree as git sees it, with `.gitleaks.toml`           | non-zero on findings                               |
+| `just speckit-install`            | `specify preset add` + `specify extension add` (dev mode)                                         |                                                    |
+| `just skills`                     | `npx skills` via deno                                                                             |                                                    |
 
 Scripts are Python 3.12, stdlib + PyYAML, each with `main()` and argparse; helpers `scripts/_git.py`,
 `scripts/_records.py`, `scripts/_gh.py`; tests in `scripts/tests/`. Platform scripts use `gh` read-only
@@ -94,7 +95,7 @@ cached afterwards). A failing hook is fixed at its cause; `SKIP=` and `--no-veri
 
 `.gitleaks.toml` starts with `[extend] useDefault = true` so the default secret rules stay active, then adds PII rules:
 `restrict-non-anonymous-emails`, `restrict-public-ipv4`, `restrict-public-ipv6`, `restrict-home-paths`. Every `uv.lock`,
-`pyproject.toml` and `*.requirements.txt` is allowlisted for the IPv4 rule only, because version strings look like
+`pyproject.toml` and `requirements.txt` is allowlisted for the IPv4 rule only, because version strings look like
 addresses. Direct CLI for arbitrary files:
 `gitleaks dir <path> --config .gitleaks.toml --no-banner -f json -r
 /dev/stdout`.
@@ -107,8 +108,8 @@ Root `pyproject.toml` is a virtual workspace (no build system): `[dependency-gro
 `uv sync --all-packages` adds the libraries. Experiments are not members: each has its own `uv.lock`, path sources
 `{ path = "../../packages/<lib>", editable = false }`, and is operated with `uv lock --project experiments/<id>` or from
 inside the directory. A directory matched by `members` must hold a `pyproject.toml`. `template/experiment/` holds the
-dependency baseline that Experiments copy (`pyproject.toml` and `uv.lock`); changing it is a preparation change. Export
-and image idioms, and the rule that Experiments share the baseline: `evidence.md`.
+dependency baseline that Experiments copy (`pyproject.toml`, `uv.lock`, `requirements.txt`); changing it is a
+preparation change. Export and image idioms, and the rule that Experiments share the baseline: `evidence.md`.
 
 ## Devcontainer
 

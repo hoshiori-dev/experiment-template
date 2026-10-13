@@ -63,8 +63,9 @@ the same skills through `.agents/skills/` (the `speckit-*` entries are symlinks 
 
 `just` lists every recipe. The ones you will use: `just check` (format, lint, tests, record validation), `just status`,
 `just budget <exp-id>`, `just preflight <exp-id> <R###>`, `just epic-status <issue>`, `just spec-approval <exp-id>`,
-`just source-commit <exp-id> <R###>`, `just tracker <exp-id> <R###>`, `just outbound <path>...`,
-`just validate-records`. Scripts behind them live in `scripts/`; `scripts/README.md` lists exit codes.
+`just freeze <exp-id> [backend]`, `just source-commit <exp-id> <R###>`, `just tracker <exp-id> <R###>`,
+`just outbound <path>...`, `just validate-records`. Scripts behind them live in `scripts/`; `scripts/README.md` lists
+exit codes.
 
 ## Layout
 

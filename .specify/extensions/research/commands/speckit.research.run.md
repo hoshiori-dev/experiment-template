@@ -38,19 +38,20 @@ the runtime boundaries. The annotated record is `template/run-record.yaml`.
    `latest`, a date or a branch. Done when: `just validate-records` passes on the new file.
 
 4. **Freeze the environment.** Machine-learning example: `experiments/<id>/` has its own `pyproject.toml`, `uv.lock` and
-   `Dockerfile` with a pinned base image; inside `experiments/<id>/`, freeze the hashed manifest to
-   `runs/R###.requirements.txt` with the commands in `.agents/knowledge/evidence.md` (Environment); a run on a GPU
-   freezes and installs with the same exact accelerator backend (`--torch-backend=cuXXX`), never `auto`.
-   A manifest that differs from the previous run's, or from the baseline's, needs a reason in the plan; without one,
-   restore the lock first (`.agents/knowledge/evidence.md`, Environment). The environment is installed once per
-   manifest: build or reuse it so that an unchanged manifest installs nothing. Any other kind of experiment records
-   whatever manifest pins its environment item by item, at the path named in `environment.requirements`. Done when: the
-   manifest named in the record exists and matches what the run will install.
+   `Dockerfile` with a pinned base image; the frozen hashed manifest is
+   `experiments/<id>/requirements.txt`, one file for the Experiment. When dependencies or the backend changed since it
+   was frozen, run `just freeze <id> [backend]`; a run on a GPU freezes and installs with the same exact accelerator
+   backend (`cuXXX`), never `auto`. Otherwise leave the file as it is: the source commit fixes the version this run
+   installs. A manifest that differs from the previous run's, or from the baseline's, needs a reason in the plan;
+   without one, restore the lock first (`.agents/knowledge/evidence.md`, Environment). The environment is installed once per manifest: build or reuse
+   it so that an unchanged manifest installs nothing. Any other kind of experiment records whatever manifest pins its
+   environment item by item, at the path named in `environment.requirements`. Done when: the manifest named in the
+   record exists and matches what the run will install.
 
 5. **Source commit.** Run `just epic-status P` first: exit 0 continues; exit 1 (invalid Epic) stops the Experiment
    (`/speckit-implement` Stopping) before any commit; exit 2 (platform unreachable) waits and retries. Then
-   `git add experiments/<id>/runs/R###.yaml experiments/<id>/runs/R###.requirements.txt` plus any input specific to this
-   run (configs, split files), and commit with title `exp-NNN: R### source`. This is the only commit on the run branch
+   `git add experiments/<id>/runs/R###.yaml`, plus `experiments/<id>/requirements.txt` when it changed and any input
+   specific to this run (configs, split files), and commit with title `exp-NNN: R### source`. This is the only commit on the run branch
    before the start; while nothing has started, amend it or recreate the branch under the same number when inputs
    change. Then run `just preflight <id> R###`, which checks the start conditions including spec approval and Epic
    validity (add `--skip-platform` only when the platform is unreachable and approval and Epic were verified earlier in

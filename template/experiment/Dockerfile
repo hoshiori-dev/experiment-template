@@ -5,15 +5,8 @@
 # separate layers, and the dependency layer is keyed by the manifest's content alone.
 # Any image that meets the boundaries is fine; edit freely.
 #
-# Build context: the experiment directory as of the source commit, for example extracted
-# with `git archive <source-commit>:experiments/<id>` into a directory under .local/runs/.
-# Build: docker build --build-arg RUN_ID=R001 -t <image> <context>
-
-# The run ID is confined to this stage. An ARG in scope of the install step below would
-# rebuild the dependency layer for every run, even with an identical manifest.
-FROM scratch AS manifest
-ARG RUN_ID
-COPY runs/${RUN_ID}.requirements.txt /requirements.txt
+# Build context: the experiment directory as of the source commit (`just image <commit>`
+# in this directory extracts it with git archive and builds).
 
 # Keep the base image and the uv release as the starter has them unless the plan says why:
 # every layer below is shared between Experiments only while these lines are the same.
@@ -22,17 +15,17 @@ FROM python:3.12-slim
 # uv, pinned to a release (or a digest, for stricter reproducibility).
 COPY --from=ghcr.io/astral-sh/uv:0.12.23 /uv /uvx /bin/
 
-# Step 1: dependencies. Only the frozen manifest is visible here (mounted, not copied), so
-# this layer is reused by every run and every Experiment whose manifest has the same
+# Step 1: dependencies. Only requirements.txt is visible here (mounted, not copied), so
+# this layer is reused by every round and every Experiment whose manifest has the same
 # content; the cache mount keeps downloaded wheels when the manifest does change.
 # --require-hashes rejects any line without a hash; --no-deps installs the manifest as is.
 #
-# With PyTorch, name the accelerator backend exactly and freeze the manifest with the same
-# option (.agents/knowledge/evidence.md, Environment): add --torch-backend=cuXXX matching
-# the driver of the machine that runs, or --torch-backend=cpu. Never auto: it is decided by
-# the machine that builds.
+# With PyTorch, name the accelerator backend exactly, the same one the manifest was frozen
+# with (`just freeze <exp-id> cuXXX`): add --torch-backend=cuXXX matching the driver of the
+# machine that runs, or --torch-backend=cpu. Never auto: it is decided by the machine that
+# builds.
 ENV UV_LINK_MODE=copy UV_CACHE_DIR=/var/cache/uv
-RUN --mount=type=bind,from=manifest,source=/requirements.txt,target=/tmp/requirements.txt \
+RUN --mount=type=bind,source=requirements.txt,target=/tmp/requirements.txt \
     --mount=type=cache,target=/var/cache/uv \
     uv pip install --system --require-hashes --no-deps -r /tmp/requirements.txt
 

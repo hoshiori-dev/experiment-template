@@ -40,11 +40,11 @@ resources:
 max_duration: "PT2H"
 
 # How the environment is fixed: the image definition, the experiment's lock, and the
-# frozen hashed manifest exported for this run and committed with the record.
+# frozen hashed manifest as the source commit has it.
 environment:
   dockerfile: experiments/exp-023-normalization-instability/Dockerfile
   lockfile: experiments/exp-023-normalization-instability/uv.lock
-  requirements: experiments/exp-023-normalization-instability/runs/R001.requirements.txt
+  requirements: experiments/exp-023-normalization-instability/requirements.txt
 
 # Reservation in the spec's unit; counted until an outcome is written. Omit the whole
 # block when the spec has no budget block (the Epic says "unlimited").

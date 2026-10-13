@@ -50,9 +50,10 @@ regexes = [
 # Exclude lock files, frozen manifests, dependency declarations and this config file
 paths = [
     # Version strings may look like an IP, e.g. 1.2.3.4; every uv.lock, including
-    # the ones inside experiments, and every frozen manifest runs/R###.requirements.txt
+    # the ones inside experiments, and every frozen manifest requirements.txt
+    # (also the earlier per-run form runs/R###.requirements.txt)
     '''(^|/)uv\.lock$''',
-    '''\.requirements\.txt$''',
+    '''(^|/|\.)requirements\.txt$''',
     '''(^|/)pyproject\.toml$''',
     # Exclude this config file
     '''\.gitleaks\.toml'''

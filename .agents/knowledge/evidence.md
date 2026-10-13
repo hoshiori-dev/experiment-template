@@ -23,9 +23,10 @@ Every Formal Run happens on its own branch; the branch structure itself records 
    too; retries get a new number.
 2. Write `experiments/<exp-id>/runs/R###.yaml`: what the run decides, command, parameter source, data, resources,
    maximum duration, environment definition, reservation (schema below; start from `template/run-record.yaml`).
-3. Freeze the environment and export the hashed manifest `experiments/<exp-id>/runs/R###.requirements.txt`.
-4. Commit the record, the manifest and any inputs specific to this run. This is the first commit on the run branch: the
-   **source commit**.
+3. Make sure the frozen manifest `experiments/<exp-id>/requirements.txt` matches the environment this run needs
+   (`just freeze <exp-id> [backend]` when dependencies changed since it was last frozen).
+4. Commit the record, the manifest when it changed, and any inputs specific to this run. This is the first commit on the
+   run branch: the **source commit**.
 5. Confirm the start conditions (`just preflight <exp-id> R###`).
 6. Run, using only the source commit's content, and record the source commit hash in the tracker. How to build and
    launch is the agent's choice.
@@ -115,19 +116,21 @@ resources is a new decision, recorded in a new run record.
 
 ## Environment frozen per Experiment
 
-Boundaries: every Formal Run's environment is pinned item by item in a hashed manifest committed with the source commit;
-the environment belongs to the Experiment, which has its own lock and is not a member of the root workspace; an
-environment changed after freezing voids the freeze, so re-freeze and redo the source commit for a run not yet started,
-never reinstall and continue. Reason: preprocessing, training and reproduced third-party code conflict down to system
-libraries, and separate locks keep parallel Experiments from editing one shared file.
+Boundaries: every Formal Run's environment is pinned item by item in a hashed manifest that is part of the source
+commit, one file per Experiment (`experiments/<exp-id>/requirements.txt`), regenerated only when dependencies change:
+the source commit fixes which version of it a run installed, so no copy per run is kept; the environment belongs to the
+Experiment, which has its own lock and is not a member of the root workspace; an environment changed after freezing
+voids the freeze, so re-freeze and redo the source commit for a run not yet started, never reinstall and continue.
+Reason: preprocessing, training and reproduced third-party code conflict down to system libraries, and separate locks
+keep parallel Experiments from editing one shared file.
 
 Shared by default: an Experiment owns its lock file, and the content of that file is the project baseline
-(`template/experiment/pyproject.toml` and `uv.lock`) unless the plan states why this Experiment needs something else.
-The same holds for the base image and tool versions. When the baseline lacks a dependency, reuse the lock of an earlier
-Experiment that has it before resolving anything new; when you add one, keep every existing pin (`uv lock`, never
-`--upgrade`). A difference without a stated reason is a defect: each distinct manifest costs a full install, an image
-layer or a venv of its own, and one more variable between Experiments that are compared. Dependencies that several
-Experiments added are moved into the baseline in the next preparation phase.
+(`template/experiment/`: `pyproject.toml`, `uv.lock`, `requirements.txt`) unless the plan states why this Experiment
+needs something else. The same holds for the base image and tool versions. When the baseline lacks a dependency, reuse
+the lock of an earlier Experiment that has it before resolving anything new; when you add one, keep every existing pin
+(`uv lock`, never `--upgrade`). A difference without a stated reason is a defect: each distinct manifest costs a full
+install, an image layer or a venv of its own, and one more variable between Experiments that are compared. Dependencies
+that several Experiments added are moved into the baseline in the next preparation phase.
 
 Install once per manifest, in every execution environment: whatever is installed is keyed by the manifest's content, not
 by the run or the Experiment, so a run whose manifest is unchanged installs nothing, and a code change never triggers an
@@ -156,7 +159,7 @@ Why this order: across the rounds of an Experiment, and across Experiments on th
 changes, so everything up to and including the dependencies comes from the build cache and a rebuild only copies the
 source. Whatever would change per run (run ID, source commit, the source tree) stays out of step 1; a build argument in
 scope of the install step counts, because its value is part of that step's cache key. Check once per Experiment: a
-second build with another run ID and an unchanged manifest reports the install step as `CACHED`.
+second build after a source-only change reports the install step as `CACHED`.
 
 Fitting the environment: a run that needs a GPU names its accelerator backend exactly, `--torch-backend=cuXXX` for
 PyTorch (`cpu` for a CPU run), chosen to match the driver of the machine that executes the run. Never `auto` and never
@@ -164,25 +167,27 @@ the installer's default: both are decided by the machine that builds, which may 
 change of backend (see No silent degradation). The first thing the run does is fail if the requested accelerator does
 not start. A project without PyTorch drops the option.
 
-Freezing the manifest (per run, from the Experiment directory). The backend is part of what is frozen, because the same
-version has different files and hashes per backend; the manifest is compiled with the same option the image installs
-with, constrained to the versions in the lock:
+Freezing the manifest: `just freeze <exp-id> [backend]` writes `experiments/<exp-id>/requirements.txt` from the
+Experiment's `pyproject.toml` and `uv.lock`; run it when dependencies or the backend change and commit the result with
+the lock. Every Experiment uses this one recipe, so equal dependencies give equal files. The backend is part of what is
+frozen, because the same version has different files and hashes per backend: with a backend the recipe compiles the
+manifest with the option the image installs with, constrained to the versions in the lock,
 
 ```sh
-uv export --format requirements.txt --locked --no-dev --no-emit-project --no-emit-local --no-hashes -o /tmp/pins.txt
-uv pip compile pyproject.toml --constraint /tmp/pins.txt --torch-backend=cuXXX --generate-hashes --no-header --no-annotate -o runs/R###.requirements.txt
+uv export --format requirements.txt --locked --no-dev --no-emit-project --no-emit-local --no-hashes -o <pins>
+uv pip compile pyproject.toml --constraint <pins> --torch-backend=cuXXX --generate-hashes --no-header --no-annotate -o requirements.txt
 ```
 
-Without PyTorch one command is enough:
+and without one it exports the lock as it is:
 
 ```sh
-uv export --format requirements.txt --locked --no-dev --no-emit-project --no-emit-local --no-header --no-annotate -o runs/R###.requirements.txt
+uv export --format requirements.txt --locked --no-dev --no-emit-project --no-emit-local --no-header --no-annotate -o requirements.txt
 ```
 
 `--no-header` and `--no-annotate` drop the comments that repeat the command line and the project name, so manifests of
-the same dependencies are byte-identical across runs and Experiments and share one installed layer. A manifest frozen
-for one backend installs only with that backend: without the option, or with another, the install fails on a missing
-version or a hash mismatch, which is the intended result. Shared libraries are path dependencies
+the same dependencies are byte-identical across Experiments and share one installed layer. A manifest frozen for one
+backend installs only with that backend: without the option, or with another, the install fails on a missing version or
+a hash mismatch, which is the intended result. Shared libraries are path dependencies
 `{ path = "../../packages/<lib>", editable = false }`; they are left out of the manifest (`--no-emit-local`, they carry
 no hash), built as wheels with `uv build --package <lib>` from the root, and installed in a step of their own between
 the two above.

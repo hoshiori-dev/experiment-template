@@ -1,0 +1,31 @@
+# Build and launch recipes of this experiment. They are examples: how to build and run is
+# the experiment's own choice, so edit or replace them. A recipe not found here falls back
+# to the root justfile (check, budget, preflight, freeze, ...); do not reuse those names.
+
+set fallback
+set positional-arguments
+
+exp := file_name(justfile_directory())
+root := justfile_directory() / "../.."
+
+# Build the image from this directory as of a commit: just image [commit]
+image commit="HEAD":
+    #!/usr/bin/env bash
+    set -euo pipefail
+    context=$(mktemp -d)
+    trap 'rm -rf "$context"' EXIT
+    git -C "{{ root }}" archive "$1:experiments/{{ exp }}" | tar -x -C "$context"
+    docker build -t "{{ exp }}:$(git -C "{{ root }}" rev-parse --short "$1")" "$context"
+
+# Launch a command in the image of a commit, offline, with data read-only and outputs
+# under .local/runs/<exp-id>/<R###>/: just run <R###> <commit> <command>...
+run id commit +command:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    local="$(cd "{{ root }}" && pwd)/.local"
+    out="$local/runs/{{ exp }}/$1"
+    mkdir -p "$out" "$local/trackio" "$local/data"
+    docker run --rm --network none --user "$(id -u):$(id -g)" --tmpfs /tmp -e HOME=/tmp \
+        -e SOURCE_COMMIT="$(git -C "{{ root }}" rev-parse "$2")" -e FORMAL_RUN="{{ exp }}/$1" \
+        -v "$local/data:/data:ro" -v "$out:/out" -v "$local/trackio:/trackio" -e TRACKIO_DIR=/trackio \
+        "{{ exp }}:$(git -C "{{ root }}" rev-parse --short "$2")" "${@:3}"

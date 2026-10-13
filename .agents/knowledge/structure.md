@@ -30,7 +30,7 @@ writing a commit message. Source of truth for where things live and who merges t
 | `docs/`                   | accepted experimental knowledge                                                                                                       | human            | preparation     |
 | `specs/<id>/`             | how one Experiment is coordinated: `spec.md`, `plan.md`, `tasks.md`                                                                   | governance model | experimentation |
 | `experiments/<id>/`       | what one Experiment produced: `README.md`, code, config, own `pyproject.toml`, environment, results, tests                            | governance model | experimentation |
-| `experiments/<id>/runs/`  | `R###.yaml` records and `R###.requirements.txt` manifests                                                                             | governance model | experimentation |
+| `experiments/<id>/runs/`  | `R###.yaml` records (the frozen manifest is `experiments/<id>/requirements.txt`)                                                      | governance model | experimentation |
 | `reports/`                | deliverables for people: papers, reports                                                                                              | human            | reporting       |
 | `demos/`                  | demonstrations                                                                                                                        | human            | reporting       |
 | `.local/`                 | gitignored: `data/<input>/` (+`VERSION`), `runs/<exp-id>/<R###>/`, `trackio/`, `drafts/`                                              | not in Git       | any time        |
