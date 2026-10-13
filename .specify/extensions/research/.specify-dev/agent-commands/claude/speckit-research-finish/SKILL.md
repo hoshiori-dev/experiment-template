@@ -55,13 +55,12 @@ what its limits are, and how to reproduce it. Read `.agents/knowledge/evidence.m
 
 7. **Actual usage to the issue.** Total `actual_usage` over all records is the Experiment's usage. Write a comment draft
    at `.local/drafts/<id>-usage.md`: the status line, the usage and unit, the limit, and a link to the README path; run
-   `just outbound` on it. With external writes on (the shipped default), post it with `gh issue comment N --body-file`.
-   Done when: the number is on the issue or in the draft.
+   `just outbound` on it. With external writes on, post it with `gh issue comment N --body-file`. Done when: the number
+   is on the issue or in the draft.
 
 ## Hand-over
 
 Stop. The pull request for branch `<id>` is merged into `main` with a merge commit (never squash or rebase: run
-references point at these commits). High-automation mode (the shipped default): the agent merges with
-`gh pr merge <pr> --merge` only when the PR touches nothing outside `specs/<id>/` and `experiments/<id>/`; otherwise the
-human merges. Human-led mode: the human reviews and merges. Update the PR body from `.local/drafts/<id>-pr.md` with the
-status line and usage before the merge.
+references point at these commits). High-automation mode: the agent merges with `gh pr merge <pr> --merge` only when the
+PR touches nothing outside `specs/<id>/` and `experiments/<id>/`; otherwise the human merges. Human-led mode: the human
+reviews and merges. Update the PR body from `.local/drafts/<id>-pr.md` with the status line and usage before the merge.

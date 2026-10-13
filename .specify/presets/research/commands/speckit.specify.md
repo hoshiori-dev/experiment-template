@@ -65,10 +65,10 @@ stopping rules this command enforces.
 
 ## Hand-over
 
-- **High-automation mode with external writes on** (the shipped default; AGENTS.md "Current settings" states the current
-  value): push the branch, open the PR with `gh pr create --title "<id>" --body-file .local/drafts/<id>-pr.md`, then
-  request approval through `/speckit-research-approve <id>` executed by a fresh sub-agent that holds none of this
-  conversation's context. Nothing runs as evidence before the label `spec:approved` exists.
+- **High-automation mode with external writes on** (AGENTS.md "Current settings" states the current value): push the
+  branch, open the PR with `gh pr create --title "<id>" --body-file .local/drafts/<id>-pr.md`, then request approval
+  through `/speckit-research-approve <id>` executed by a fresh sub-agent that holds none of this conversation's context.
+  Nothing runs as evidence before the label `spec:approved` exists.
 - **External writes off**: stop here. Tell the human: push branch `<id>`, open the pull request with the draft body,
   review the spec, and apply the label `spec:approved` when they accept it.
 

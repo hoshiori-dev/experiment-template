@@ -30,16 +30,16 @@ synthesis); agents do the work in between. The design is in `README.md`; the rul
 
 ## Read when
 
-| Event                                                                    | Read                                                                    |
-| ------------------------------------------------------------------------ | ----------------------------------------------------------------------- |
-| Starting any research work, or unsure what Epic/Experiment/Run mean      | `.agents/knowledge/research-loop.md`                                    |
-| Deciding whether you may do something alone, stopping, budget, approval  | `.agents/knowledge/governance.md`                                       |
-| Preparing, starting, or closing a Formal Run; writing a run record       | `.agents/knowledge/evidence.md`                                         |
-| Creating files, naming, branching, committing                            | `.agents/knowledge/structure.md`                                        |
-| Anything that will be pushed, posted, or published                       | `.agents/knowledge/publishing.md`, then the `outbound-review` skill     |
-| A tool, hook, recipe, or config does not behave as expected              | `.agents/knowledge/tooling.md`                                          |
-| Turning this template into a real project, or changing a factory setting | the `adapt-template` skill (it reads `.agents/knowledge/adaptation.md`) |
-| At the rendezvous (start of synthesis)                                   | the `harness-checkup` skill                                             |
+| Event                                                                   | Read                                                                |
+| ----------------------------------------------------------------------- | ------------------------------------------------------------------- |
+| Starting any research work, or unsure what Epic/Experiment/Run mean     | `.agents/knowledge/research-loop.md`                                |
+| Deciding whether you may do something alone, stopping, budget, approval | `.agents/knowledge/governance.md`                                   |
+| Preparing, starting, or closing a Formal Run; writing a run record      | `.agents/knowledge/evidence.md`                                     |
+| Creating files, naming, branching, committing                           | `.agents/knowledge/structure.md`                                    |
+| Anything that will be pushed, posted, or published                      | `.agents/knowledge/publishing.md`, then the `outbound-review` skill |
+| A tool, hook, recipe, or config does not behave as expected             | `.agents/knowledge/tooling.md`                                      |
+| Setting the project up from the template, or changing any setting below | the `adapt-template` skill (options and costs live only there)      |
+| At the rendezvous (start of synthesis)                                  | the `harness-checkup` skill                                         |
 
 ## Procedures (Spec Kit commands, installed as skills)
 
@@ -93,11 +93,11 @@ reports/ demos/                 deliverables (empty until report time)
 | Tracker (example)               | Trackio, local SQLite under `.local/trackio/`                                        |
 | Platform                        | GitHub; `gh` for queries and the writes above                                        |
 
-Change a setting by editing this table and `.agents/knowledge/adaptation.md` in the same preparation-phase pull request;
-the setting is live only after a human merges it.
+This table states the project as it is. Change a setting only through the `adapt-template` skill, in a preparation-phase
+pull request; the setting is live only after a human merges it.
 
 ## Keep this file true
 
 A new knowledge file or skill: add its trigger to "Read when". A new or renamed `just` recipe or Spec Kit command:
-update "Commands" or "Procedures". A changed factory setting: update "Current settings" and `README.md`. Target length:
-about 100 lines.
+update "Commands" or "Procedures". A changed setting: the `adapt-template` skill updates "Current settings" and
+`README.md`. Target length: about 100 lines.

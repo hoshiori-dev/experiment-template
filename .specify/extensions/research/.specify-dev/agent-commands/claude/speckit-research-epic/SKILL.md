@@ -58,7 +58,7 @@ Read `.agents/knowledge/governance.md` for what an Epic is and when it counts as
 
 ## Hand-over
 
-With external writes on (the shipped default), create the issue with
+With external writes on, create the issue with
 `gh issue create --title "<title>" --label epic --body-file .local/drafts/epic-<slug>.md` and tell the maintainer which
 number to review and what the completeness check found. With external writes off, hand both drafts to the maintainer,
 who creates the issue from the form "Epic". Either way stop here: the maintainer fills the budget and adds

@@ -53,7 +53,7 @@ The proposal becomes knowledge only when a human merges it (the Acceptance Gate)
 
 ## Hand-over
 
-Stop before merging. External writes on (the shipped default): push and
+Stop before merging. External writes on: push and
 `gh pr create --title "docs: synthesize epic E" --label synthesis --body-file .local/drafts/synthesis-E-pr.md`, then
 stop; the merge is the human's act in every governance model. External writes off: the human pushes `synthesis/E`, opens
 the pull request with the draft body and label `synthesis`, reviews, and merges with a merge commit. Until merged,

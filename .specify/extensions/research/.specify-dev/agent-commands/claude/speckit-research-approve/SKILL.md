@@ -52,7 +52,7 @@ for the approval rules and the budget arithmetic.
    explains the verdict to someone who has read neither the spec nor the Epic.
 
 5. **Record the approval.**
-   - External writes on, high-automation mode (the shipped default): on approve,
+   - External writes on, high-automation mode: on approve,
      `gh pr comment <pr> --body-file
      .local/drafts/<id>-approval.md` and
      `gh pr edit <pr> --add-label spec:approved`, where `<pr>` is from `gh pr list --head <id> --json number`. On

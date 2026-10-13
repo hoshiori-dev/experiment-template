@@ -49,7 +49,7 @@ run); or the question is unreachable under the spec's constraints. The completio
 the Experiment is ready for `/speckit-research-finish <id>`.
 
 A spec edited after approval makes the label `spec:approved` stale: no Formal Run starts until the spec is approved
-again. In high-automation mode with writes on (the shipped default), remove the label yourself
+again. In high-automation mode with writes on, remove the label yourself
 (`gh pr edit <pr> --remove-label spec:approved`) and request `/speckit-research-approve <id>` from a fresh sub-agent;
 informal work may continue meanwhile. With external writes off, `gh pr edit` is denied, so write the request to
 `.local/drafts/<id>-reapproval.md` (the PR number, the commits that changed the spec, what changed and why) and ask the
@@ -61,6 +61,6 @@ When stopping short, write where to find the reason:
 2. a comment draft at `.local/drafts/<id>-stop.md` addressed to the person responsible, stating the condition hit, the
    budget spent, and what you recommend; pass it through `just outbound .local/drafts/<id>-stop.md`.
 
-In high-automation mode with writes on (the shipped default), post it with `gh pr comment` and move on to another
-Experiment under the Epic. With external writes off, the human posts the comment. An invalid Epic (`just epic-status`)
-stops the whole loop: finish running runs, start nothing new, and report to the human.
+In high-automation mode with writes on, post it with `gh pr comment` and move on to another Experiment under the Epic.
+With external writes off, the human posts the comment. An invalid Epic (`just epic-status`) stops the whole loop: finish
+running runs, start nothing new, and report to the human.

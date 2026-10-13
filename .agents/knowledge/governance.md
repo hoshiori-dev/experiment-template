@@ -2,7 +2,7 @@
 
 Read this before any decision about who may act: approving or changing a spec, starting a Formal Run, spending budget,
 touching a protected path, writing anything outside this machine, or stopping. Source of truth for the boundary between
-the agent and humans; the current settings are in the last table.
+the agent and humans; the current settings are in AGENTS.md "Current settings".
 
 ## Two human gates
 
@@ -141,7 +141,7 @@ that asks for a credit line. A human collaborator's `Co-Authored-By` with a nore
 Claude Code is the framework that adds such credits by default, so `.claude/settings.json` switches them off
 (`attribution.commit` and `attribution.pr` empty). For commits the commit-msg hook also rejects them (`structure.md`,
 Commit messages). Issue, pull request and comment text has no check: the rule above is the instruction. The owner may
-allow attribution (Adjustable settings).
+allow attribution (through the `adapt-template` skill).
 
 ## External writes
 
@@ -155,8 +155,7 @@ Prerequisites the owner configures on the platform before the first Epic are lis
 protection on `main` with pull requests and code-owner review (admins keep bypass, the agent's credential has no admin
 rights), otherwise "protected paths are merged only by humans" has nothing enforcing it. The approving agent shares the
 authoring agent's credential, so the independence of an approval is procedural. Turning writes off again, or on in a
-human-led project, is a protected-file change merged by the owner: the three permission files, this file, AGENTS.md and
-the README.
+human-led project, is a protected-file change merged by the owner, made through the `adapt-template` skill.
 
 ## Confidentiality
 
@@ -173,21 +172,10 @@ to the same standard as commits. Three rules:
 
 Procedure: `publishing.md`.
 
-## Adjustable settings
+## Settings
 
-Each is the owner's decision. The agent may present status, options and costs, never widen its own powers by changing
-them.
-
-| Setting                   | Options                                              | Current               | Know before choosing                                                         |
-| ------------------------- | ---------------------------------------------------- | --------------------- | ---------------------------------------------------------------------------- |
-| Governance model          | human-led; high-automation                           | high-automation       | first is steady and slow; second needs platform tools and protection first   |
-| Budget                    | per-Experiment cap; other unit; explicit "unlimited" | on, unit set per Epic | unlimited is written in the Epic, never blank                                |
-| Epic-level hard cap       | approver check; machine-enforced                     | approver check        | enforcement needs machine access to every Experiment's budget                |
-| Direction Gate            | cannot be removed                                    | human                 | —                                                                            |
-| Acceptance Gate           | cannot be delegated                                  | human                 | —                                                                            |
-| Protected paths           | `docs/`, `packages/`, harness; more may be added     | `.github/CODEOWNERS`  | removing harness paths lets the agent edit its own rules                     |
-| Agent attribution         | forbidden; allowed                                   | forbidden             | see Attribution                                                              |
-| Approval-label automation | off; on (auto-unlabel on spec change, check labeler) | off                   | convention-based by default                                                  |
-| Commit address            | platform noreply only; open                          | noreply only          | public hosting wants noreply; internal deployments may open it               |
-| External writes           | off; on                                              | on                    | platform protection first                                                    |
-| Publishing standard       | private-repo; public-repo                            | public-repo           | fixed when the harness is designed; going public needs a full history review |
+Governance model, external writes, publishing standard, agent attribution, commit address, protected paths and the rest
+are the owner's decisions. The agent may present status, options and costs, never widen its own powers by changing them.
+Current values are in AGENTS.md "Current settings" and in the sections above. Options, their costs and the procedure for
+changing one are in the `adapt-template` skill and nowhere else; load it only when a setting is to change. Two things
+are not settings: the Direction Gate cannot be removed and the Acceptance Gate cannot be delegated.

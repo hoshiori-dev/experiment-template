@@ -93,11 +93,9 @@ Four requirements; any structure meeting them works:
 4. Commits referenced by runs are kept as they are: experiments and syntheses enter `main` with full ancestry, no
    squash, no rebase. Experiment and synthesis PRs use the merge-commit method.
 
-| Structure                                | How                                                                                                                  | Fits                                                      | Cost                                                                                    |
-| ---------------------------------------- | -------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------- | --------------------------------------------------------------------------------------- |
-| mainline + experiment branches (current) | each Experiment branches from `main`, returns with a merge commit                                                    | a small team in one repo, or one person with agents       | `main` moves during experimentation; the freeze rests on protected paths and convention |
-| fork workflow                            | each researcher forks, branches in the fork, opens PRs to the main repo; everyone syncs at preparation               | several researchers, or contributors without write access | Epics and experiment issues exist only in the main repo                                 |
-| one integration branch per Epic          | branch at the end of preparation; experiments branch from and return to it; merged to `main` at the next preparation | a visible branch point for the frozen environment         | one more layer, alive for a whole round                                                 |
+Current structure: mainline plus experiment branches. Each Experiment branches from `main` and returns with a merge
+commit; `main` moves during experimentation, so the freeze rests on protected paths and convention. Other structures
+that meet the four requirements are described in the `adapt-template` skill.
 
 Committing straight to `main` is excluded: every Experiment needs a PR, because the approval label and the merge review
 hang on it. Worktrees for parallel agents are extra local lines inside any structure. Release-oriented branch models
