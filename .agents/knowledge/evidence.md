@@ -121,22 +121,52 @@ environment changed after freezing voids the freeze, so re-freeze and redo the s
 never reinstall and continue. Reason: preprocessing, training and reproduced third-party code conflict down to system
 libraries, and separate locks keep parallel Experiments from editing one shared file.
 
+Shared by default: an Experiment owns its lock file, and the content of that file is the project baseline
+(`template/experiment/pyproject.toml` and `uv.lock`) unless the plan states why this Experiment needs something else.
+The same holds for the base image and tool versions. When the baseline lacks a dependency, reuse the lock of an earlier
+Experiment that has it before resolving anything new; when you add one, keep every existing pin (`uv lock`, never
+`--upgrade`). A difference without a stated reason is a defect: each distinct manifest costs a full install, an image
+layer or a venv of its own, and one more variable between Experiments that are compared. Dependencies that several
+Experiments added are moved into the baseline in the next preparation phase.
+
+Install once per manifest, in every execution environment: whatever is installed is keyed by the manifest's content, not
+by the run or the Experiment, so a run whose manifest is unchanged installs nothing, and a code change never triggers an
+install. In a container, dependencies and source are separate layers, dependencies first, and nothing that varies per
+run (run ID, source commit, the source tree) is visible to the dependency layer. Without a container, the manifest is
+installed with `--require-hashes` into a venv named after the manifest's digest (for example
+`.local/envs/<first 12 hex of its sha256>/`), created once, reused by every run with that manifest, and never modified
+afterwards; a changed manifest gets a new venv.
+
 ML example (`template/experiment/` is the starter): the Experiment has its own `Dockerfile`, `pyproject.toml` and
 `uv.lock`; shared libraries are path dependencies `{ path = "../../packages/<lib>", editable = false }`; the base image
 is pinned to a digest or explicit tag. Export per run, from the Experiment directory:
 
 ```sh
-uv export --format requirements.txt --locked --no-dev --no-emit-project --no-emit-local -o runs/R###.requirements.txt
+uv export --format requirements.txt --locked --no-dev --no-emit-project --no-emit-local --no-header --no-annotate -o runs/R###.requirements.txt
 ```
 
-`--no-emit-local` drops path dependencies because they export without hashes; build shared libraries as wheels with
-`uv build --package <lib>` from the root and install them separately. In the image:
+`--no-header` and `--no-annotate` drop the comments that repeat the command line and the project name, so manifests of
+the same dependencies are byte-identical across runs and Experiments. `--no-emit-local` drops path dependencies because
+they export without hashes; build shared libraries as wheels with `uv build --package <lib>` from the root and install
+them separately. In the image, the run ID stays in a stage of its own (a build argument in scope of a `RUN` rebuilds
+that layer whenever its value changes), the manifest is mounted, and the source is copied last:
 
 ```dockerfile
+FROM scratch AS manifest
+ARG RUN_ID
+COPY runs/${RUN_ID}.requirements.txt /requirements.txt
+
+FROM python:3.12-slim
 COPY --from=ghcr.io/astral-sh/uv:0.12.23 /uv /uvx /bin/
-RUN uv pip install --system --require-hashes --no-deps -r R###.requirements.txt \
- && uv pip install --system --no-deps ./<lib>-<version>-py3-none-any.whl
+ENV UV_LINK_MODE=copy UV_CACHE_DIR=/var/cache/uv
+RUN --mount=type=bind,from=manifest,source=/requirements.txt,target=/tmp/requirements.txt \
+    --mount=type=cache,target=/var/cache/uv \
+    uv pip install --system --require-hashes --no-deps -r /tmp/requirements.txt
+COPY . /app/
 ```
+
+Check it once per Experiment: a second build with another run ID and an unchanged manifest reports the install step as
+`CACHED`.
 
 ## Data and external inputs
 

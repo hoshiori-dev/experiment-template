@@ -36,16 +36,15 @@ Read `.agents/knowledge/governance.md` for what an Epic is and when it counts as
      sources and licence range.
    - **Budget policy**: unit, total cap for the Epic, allotment per Experiment. Unlimited is written as "unlimited",
      never left blank.
-   - **Exit criteria**: when synthesis may start. Required: without it nobody can tell when to stop
-     opening Experiments. Done when: every field heading is present.
+   - **Exit criteria**: when synthesis may start. Required: without it nobody can tell when to stop opening Experiments.
+     Done when: every field heading is present.
 
 3. **Budget numbers come from the maintainer.** Where the human gave none, write the line
    `Budget policy: to be filled by the maintainer before publishing` under the field; the unit may be proposed, the
    numbers never. Done when: no budget number in the draft lacks a human source.
 
-4. **Completeness check.** Report each item as present or missing, in
-   `.local/drafts/epic-<slug>-check.md` and in the conversation (a separate file, so the check never becomes part of
-   the Epic body):
+4. **Completeness check.** Report each item as present or missing, in `.local/drafts/epic-<slug>-check.md` and in the
+   conversation (a separate file, so the check never becomes part of the Epic body):
    - budget policy written (unit, total, per-Experiment allotment, or "unlimited");
    - scope decidable: a reader can tell whether a given Experiment belongs;
    - allowed data sources and licence range written;

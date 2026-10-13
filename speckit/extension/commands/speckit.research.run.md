@@ -39,10 +39,13 @@ the runtime boundaries. The annotated record is `template/run-record.yaml`.
 
 4. **Freeze the environment.** Machine-learning example: `experiments/<id>/` has its own `pyproject.toml`, `uv.lock` and
    `Dockerfile` with a pinned base image; inside `experiments/<id>/`, export the hashed manifest:
-   `uv export --format requirements.txt --locked --no-dev --no-emit-project --no-emit-local
+   `uv export --format requirements.txt --locked --no-dev --no-emit-project --no-emit-local --no-header --no-annotate
    -o runs/R###.requirements.txt`.
-   Any other kind of experiment records whatever manifest pins its environment item by item, at the path named in
-   `environment.requirements`. Done when: the manifest named in the record exists and matches what the run will install.
+   A manifest that differs from the previous run's, or from the baseline's, needs a reason in the plan; without one,
+   restore the lock first (`.agents/knowledge/evidence.md`, Environment). The environment is installed once per
+   manifest: build or reuse it so that an unchanged manifest installs nothing. Any other kind of experiment records
+   whatever manifest pins its environment item by item, at the path named in `environment.requirements`. Done when: the
+   manifest named in the record exists and matches what the run will install.
 
 5. **Source commit.** Run `just epic-status P` first: exit 0 continues; exit 1 (invalid Epic) stops the Experiment
    (`/speckit-implement` Stopping) before any commit; exit 2 (platform unreachable) waits and retries. Then

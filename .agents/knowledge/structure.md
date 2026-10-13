@@ -52,8 +52,10 @@ for them. "Governance model": human in human-led, agent in high-automation.
 4. **Every Experiment and library has its own `pyproject.toml`, locked differently.** Libraries are workspace members
    sharing the root lock, so one dev environment tests them all; they change only in preparation, so the shared lock is
    never edited in parallel. Experiments stay out of the workspace with their own `uv.lock` and path dependencies, so
-   parallel experiments never touch one lock and may need conflicting versions. Consequence: a library tested in the
-   workspace may run under other versions inside an Experiment; the Experiment's own tests and trial runs confirm it.
+   parallel experiments never touch one lock and may need conflicting versions. Owning the file is not a reason to
+   differ: its content stays the project baseline in `template/experiment/` unless the plan gives a reason
+   (`evidence.md`, Environment). Consequence: a library tested in the workspace may run under other versions inside an
+   Experiment; the Experiment's own tests and trial runs confirm it.
 5. **Tests sit next to what they test.** No root `tests/`: harness tests in `scripts/tests/`, library tests under
    `packages/<name>/`, Experiment tests in the Experiment. A root `tests/` suggests a product; there is none.
 6. **Tests pin behaviour, not coverage.** Write one when it makes people and agents surer of the code; no coverage

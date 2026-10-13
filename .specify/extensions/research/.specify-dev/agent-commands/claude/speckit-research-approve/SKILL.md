@@ -62,5 +62,5 @@ for the approval rules and the budget arithmetic.
      human holds it.
 
 Next acts: the Experiment's agent (`/speckit-implement`) once the label exists; on rejection, the author revises the
-spec and requests this command again. The label binds one spec version: any later edit to `spec.md`
-invalidates it: whoever edited removes the label and requests this command again.
+spec and requests this command again. The label binds one spec version: any later edit to `spec.md` invalidates it:
+whoever edited removes the label and requests this command again.

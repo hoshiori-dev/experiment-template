@@ -106,8 +106,9 @@ Root `pyproject.toml` is a virtual workspace (no build system): `[dependency-gro
 `[tool.uv.workspace] members = ["packages/*"]`. `uv sync` at the root installs the management tools;
 `uv sync --all-packages` adds the libraries. Experiments are not members: each has its own `uv.lock`, path sources
 `{ path = "../../packages/<lib>", editable = false }`, and is operated with `uv lock --project experiments/<id>` or from
-inside the directory. A directory matched by `members` must hold a `pyproject.toml`. Export and image idioms:
-`evidence.md`.
+inside the directory. A directory matched by `members` must hold a `pyproject.toml`. `template/experiment/` holds the
+dependency baseline that Experiments copy (`pyproject.toml` and `uv.lock`); changing it is a preparation change. Export
+and image idioms, and the rule that Experiments share the baseline: `evidence.md`.
 
 ## Devcontainer
 

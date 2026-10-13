@@ -5,7 +5,9 @@ record of how thinking moved. Nothing here binds the Experiment: the binding rul
 
 ## Current strategy
 
-How the question in the spec will be answered: the approach, what is tried first, what is deferred, and why.
+How the question in the spec will be answered: the approach, what is tried first, what is deferred, and why. When the
+Experiment's environment departs from the project baseline (dependencies, base image, tool versions), name the
+difference and the reason here.
 
 ## Candidate runs
 

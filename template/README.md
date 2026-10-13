@@ -12,8 +12,12 @@ long as the boundaries still hold. Container and lock-file mechanics in it are t
 2. Copy the starter: `cp -r template/experiment experiments/<id>`. The spec, plan and tasks go to `specs/<id>/` (the
    Spec Kit research commands create them).
 3. Rename: `name` in `experiments/<id>/pyproject.toml`, and the title line of `experiments/<id>/README.md`.
-4. Create `uv.lock` in the experiment directory once dependencies are declared (`uv lock` inside it). The experiment is
-   not a member of the root workspace; shared libraries are path dependencies (see the comment in `pyproject.toml`).
+4. Keep `pyproject.toml` and `uv.lock` as copied: they are the project's dependency baseline, and Experiments with the
+   same lock share one installed environment. When the baseline lacks what the Experiment needs, reuse the lock of an
+   earlier Experiment that has it before resolving anything new; otherwise add the dependency and run `uv lock` here (it
+   keeps the existing pins), and say in the plan why. After renaming the project run `uv lock`: it rewrites only the
+   project's own entry, and the exported manifest stays byte-identical. The experiment is not a member of the root
+   workspace; shared libraries are path dependencies (see the comment in `pyproject.toml`).
 5. Commit on the branch named `<id>`; every path belongs under `specs/<id>/` or `experiments/<id>/`.
 
 ## What the files are
@@ -21,8 +25,9 @@ long as the boundaries still hold. Container and lock-file mechanics in it are t
 | File                 | Purpose                                                                                              |
 | -------------------- | ---------------------------------------------------------------------------------------------------- |
 | `README.md`          | The deliverable: six fixed sections and a status line. Must stand alone after `specs/<id>/` is gone. |
-| `pyproject.toml`     | The experiment's own dependency declaration, locked by its own `uv.lock`.                            |
-| `Dockerfile`         | Example environment: installs the frozen manifest of one run with hash verification.                 |
+| `pyproject.toml`     | The experiment's dependency declaration; ships as the project baseline.                              |
+| `uv.lock`            | The baseline lock. The experiment owns its copy; it stays identical unless the plan gives a reason.  |
+| `Dockerfile`         | Example environment: hash-verified manifest in a layer of its own, source in a later layer.          |
 | `.dockerignore`      | Keeps local environments and caches out of the build context.                                        |
 | `../run-record.yaml` | Annotated run record; copy it to `experiments/<id>/runs/R001.yaml` and fill it in.                   |
 
@@ -39,9 +44,10 @@ append the outcome fields and the result files, then merge the run branch back w
 from the experiment's lock, for example:
 
 ```sh
-uv export --format requirements.txt --locked --no-dev --no-emit-project --no-emit-local -o runs/R001.requirements.txt
+uv export --format requirements.txt --locked --no-dev --no-emit-project --no-emit-local --no-header --no-annotate -o runs/R001.requirements.txt
 ```
 
-`--no-emit-local` drops path dependencies (they carry no hash); build shared libraries as wheels with
-`uv build --package <lib>` from the root and install them separately. `just preflight <id> R001` checks the start
-conditions that a machine can check.
+`--no-header` and `--no-annotate` leave out the comments that repeat the command and the project name, so manifests of
+the same dependencies are byte-identical across runs and Experiments; `--no-emit-local` drops path dependencies (they
+carry no hash); build shared libraries as wheels with `uv build --package <lib>` from the root and install them
+separately. `just preflight <id> R001` checks the start conditions that a machine can check.

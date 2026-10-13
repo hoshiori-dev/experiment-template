@@ -1,6 +1,11 @@
 # Dependency declaration of one experiment. Rename "experiment" to the experiment ID
 # (for example exp-023-normalization-instability). This directory is not a member of the
-# root workspace: lock it with `uv lock` run here, which writes its own uv.lock.
+# root workspace: lock it with `uv lock` run here, which updates its own uv.lock.
+#
+# This file and the uv.lock next to it are the project's dependency baseline. Keep both as
+# copied unless the plan says why this experiment needs something else: experiments with
+# the same lock share one image layer (or one venv) instead of each installing its own.
+# When you do add a dependency, `uv lock` keeps every existing pin; do not pass --upgrade.
 
 [project]
 name = "experiment"
