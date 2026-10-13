@@ -16,14 +16,12 @@ specify := "uvx --from git+https://github.com/github/spec-kit.git@v1.1.2 specify
 check: lint test validate-records
     deno fmt --check
     just --fmt --check --unstable
-    just --fmt --check --unstable -f template/experiment/justfile
     {{ ruff }} format --check scripts
 
 # Format everything in place.
 fmt:
     deno fmt
     just --fmt --unstable
-    just --fmt --unstable -f template/experiment/justfile
     {{ ruff }} format scripts
     {{ ruff }} check --fix scripts
 
