@@ -110,11 +110,13 @@ force-pushed; updates from `main` come in by merge. Run branches merge back with
 
 Format `<scope>: <summary>`, ASCII only, title at most 50 characters, summary imperative and lowercase, no trailing
 period; an optional body after a blank line wrapped at 72. Scope is the directory or concern touched
-(`scripts: reject bare email`, `harness: add tracker recipe`). On an Experiment branch or its run branches the scope is
-the short id `exp-NNN`, not the full Experiment ID, so the title fits in 50 characters (`exp-023: add r001 record`,
-`exp-023: R001 completed`). No agent attribution of any kind. The commit-msg hook (`scripts/check_commit_message.py`)
-enforces the format, rejects agent attribution, allows human `Co-Authored-By` only with noreply addresses, and rejects a
-non-noreply author identity. Set `git config user.email` to the platform noreply address before the first commit.
+(`scripts: reject bare email`); maintenance that belongs to no single directory (configuration, dependencies, permission
+tables, rules spread over several agent files) uses `chore` (`chore: add tracker recipe`). On an Experiment branch or
+its run branches the scope is the short id `exp-NNN`, not the full Experiment ID, so the title fits in 50 characters
+(`exp-023: add r001 record`, `exp-023: R001 completed`). No agent attribution of any kind. The commit-msg hook
+(`scripts/check_commit_message.py`) enforces the format, rejects agent attribution, allows human `Co-Authored-By` only
+with noreply addresses, and rejects a non-noreply author identity. Set `git config user.email` to the platform noreply
+address before the first commit.
 
 ## Language
 
