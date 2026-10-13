@@ -18,11 +18,10 @@ reported to the human instead, because any spec edit invalidates approval.
 
 ## Steps
 
-1. **Locate the Experiment.** `<id>` is the first word of `$ARGUMENTS` when it has the form
-   `exp-NNN-<slug>`; when it is left out, `<id>` is the current branch name, which must then be `exp-NNN-<slug>`. An
-   `<id>` given as an argument must equal the current branch; when they differ, or the branch is not an Experiment
-   branch and no `<id>` was given, stop and report without changing a file. No pointer file is read. Done
-   when: `specs/<id>/spec.md` is readable.
+1. **Locate the Experiment.** `<id>` is the first word of `$ARGUMENTS` when it has the form `exp-NNN-<slug>`; when it is
+   left out, `<id>` is the current branch name, which must then be `exp-NNN-<slug>`. An `<id>` given as an argument must
+   equal the current branch; when they differ, or the branch is not an Experiment branch and no `<id>` was given, stop
+   and report without changing a file. No pointer file is read. Done when: `specs/<id>/spec.md` is readable.
 
 2. **Read the fence.** Read `specs/<id>/spec.md` in full, then `specs/<id>/tasks.md` and the run records under
    `experiments/<id>/runs/` when they exist. The plan serves the spec's question within its constraints and budget. Done

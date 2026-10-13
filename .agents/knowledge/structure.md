@@ -111,10 +111,10 @@ period; an optional body after a blank line wrapped at 72. Scope is the director
 (`scripts: reject bare email`); maintenance that belongs to no single directory (configuration, dependencies, permission
 tables, rules spread over several agent files) uses `chore` (`chore: add tracker recipe`). On an Experiment branch or
 its run branches the scope is the short id `exp-NNN`, not the full Experiment ID, so the title fits in 50 characters
-(`exp-023: add r001 record`, `exp-023: R001 completed`). No agent attribution of any kind. The commit-msg hook
-(`scripts/check_commit_message.py`) enforces the format, rejects agent attribution, allows human `Co-Authored-By` only
-with noreply addresses, and rejects a non-noreply author identity. Set `git config user.email` to the platform noreply
-address before the first commit.
+(`exp-023: run R001 source`, `exp-023: record R001 completed`; the summary starts with a lowercase verb, so a run ID
+never comes first). No agent attribution of any kind. The commit-msg hook (`scripts/check_commit_message.py`) enforces
+the format, rejects agent attribution, allows human `Co-Authored-By` only with noreply addresses, and rejects a
+non-noreply author identity. Set `git config user.email` to the platform noreply address before the first commit.
 
 ## Language
 

@@ -37,12 +37,11 @@ requires an empty ledger.
 
 ## Steps
 
-1. **Locate the Experiment.** `<id>` is the first word of `$ARGUMENTS` when it has the form
-   `exp-NNN-<slug>`; when it is left out, `<id>` is the current branch name, which must then be `exp-NNN-<slug>`. An
-   `<id>` given as an argument must equal the current branch; when they differ, or the branch is not an Experiment
-   branch and no `<id>` was given, stop and report without changing a file. No pointer file is read. Done
-   when: `specs/<id>/tasks.md` is readable, or is created
-   from the template (`.specify/scripts/bash/resolve-template.sh tasks-template`, fallback
+1. **Locate the Experiment.** `<id>` is the first word of `$ARGUMENTS` when it has the form `exp-NNN-<slug>`; when it is
+   left out, `<id>` is the current branch name, which must then be `exp-NNN-<slug>`. An `<id>` given as an argument must
+   equal the current branch; when they differ, or the branch is not an Experiment branch and no `<id>` was given, stop
+   and report without changing a file. No pointer file is read. Done when: `specs/<id>/tasks.md` is readable, or is
+   created from the template (`.specify/scripts/bash/resolve-template.sh tasks-template`, fallback
    `.specify/presets/research/templates/tasks-template.md`).
 
 2. **Apply the change.** From `$ARGUMENTS`, `specs/<id>/plan.md` and the current state of the work, add new tasks with

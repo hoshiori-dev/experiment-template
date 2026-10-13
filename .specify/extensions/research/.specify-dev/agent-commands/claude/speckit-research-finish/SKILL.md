@@ -24,8 +24,8 @@ what its limits are, and how to reproduce it. Read `.agents/knowledge/evidence.m
 ## Steps
 
 1. **Locate.** `$ARGUMENTS` names `<id>`; when it is left out, `<id>` is the current branch name. Confirm
-   `git branch --show-current` is `<id>` and the tree is clean; when they differ, stop and report. Done when: `<id>` is known and `git status --porcelain`
-   is empty.
+   `git branch --show-current` is `<id>` and the tree is clean; when they differ, stop and report. Done when: `<id>` is
+   known and `git status --porcelain` is empty.
 
 2. **No unmerged run branches.** `git branch --all --list 'run/<id>/*'` lists only branches whose record on `<id>`
    carries an outcome. A run still without outcome is finished first (`/speckit-research-run` step 7-8) or recorded
