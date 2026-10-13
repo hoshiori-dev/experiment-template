@@ -21,10 +21,10 @@ inside it; only tuning-split numbers were used for that.
 Runs under consideration, in rough order, each with what it would decide and a rough cost in the budget unit. A
 candidate becomes a Formal Run through `/speckit-research-run`; informal runs need no entry.
 
-| Candidate                  | Decides                                   | Rough cost | Status     |
-| -------------------------- | ----------------------------------------- | ---------- | ---------- |
-| both arms, grid, 3 seeds   | the question, by the spec's decision rule | 0.1        | next       |
-| repeat with two more seeds | the question, if the first is borderline  | 0.15       | considered |
+| Candidate                  | Decides                                   | Rough cost | Status      |
+| -------------------------- | ----------------------------------------- | ---------- | ----------- |
+| both arms, grid, 3 seeds   | the question, by the spec's decision rule | 0.1        | became R001 |
+| repeat with two more seeds | the question, if the first is borderline  | 0.15       | considered  |
 
 ## What would change the plan
 
