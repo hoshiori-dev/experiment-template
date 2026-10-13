@@ -179,7 +179,8 @@ A new or changed description is checked with trigger tests before it is merged. 
 `evals/triggers.md`: prompts that should load it and near-misses that share its vocabulary and should not, each with the
 expected decision. Every case goes to a fresh clean-context agent that is never told which skill is under test, on the
 weakest model tier the project uses, at least twice; the skills each run actually loaded are compared with the
-expectation. A case passes when two runs agree with it. On a failure change the description, not the prompt, and rerun
+expectation. Run the agents in a checkout of the candidate itself: an isolated worktree cut from `main` shows them the
+old harness. A case passes when two runs agree with it. On a failure change the description, not the prompt, and rerun
 all cases of the skills that share vocabulary with it.
 
 ## `.local/` layout

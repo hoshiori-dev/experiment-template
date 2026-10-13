@@ -33,8 +33,8 @@ synthesis branch, or on any experiment branch.
 5. **Unreachable knowledge, named skills.** Each `.agents/knowledge/*.md` is named, with a when-to-read trigger, by
    `AGENTS.md` or by another file `AGENTS.md` reaches. List the files no pointer reaches and the pointers whose trigger
    is vague ("see X for details"). Skills are the opposite case: they load by description alone, so list every place
-   outside a skill's own directory that names a project skill or its path, and every project skill whose
-   `evals/triggers.md` is missing or older than its description (`git log -1` on both).
+   outside a skill's own directory that names a project skill or its path, and every skill written for this repository (not the ones `skills-lock.json` lists as installed, not the
+   `speckit-*` commands) whose `evals/triggers.md` is missing or older than its description (`git log -1` on both).
 6. **Rules without a check.** For each rule in the knowledge files that a script or hook could verify mechanically (path
    shape, enum values, branch scope, required fields, naming), check whether one exists in `scripts/` or
    `.pre-commit-config.yaml`. List the candidates with the check that would cover them.
@@ -46,7 +46,7 @@ synthesis branch, or on any experiment branch.
    rules, Check results, Proposed changes. Each finding: file, line, what, proposed action. Done when every finding from
    steps 2-8 appears once.
 10. **Propose changes on a separate branch.** Branch `harness/checkup-<YYYY-MM-DD>` from the rendezvous commit, apply
-    the mechanical fixes (stale names, dead pointers, duplicate → pointer), commit with scope `harness:`, and leave the
+    the mechanical fixes (stale names, dead pointers, duplicate → pointer), commit with scope `chore:`, and leave the
     branch local for a human to review and merge. Judgement calls (removing a rule, adding a check) stay as proposals in
     the report. Done when the branch exists and the synthesis branch is untouched.
 
