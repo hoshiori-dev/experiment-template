@@ -106,7 +106,7 @@ person, move on to another Experiment under the Epic. Triggers:
 - the Epic's objective cannot be reached under its constraints and budget;
 - no unblocked Experiment is left.
 
-Each comment is drafted in `.local/drafts/`, reviewed with the `outbound-review` skill, then posted (`gh pr comment`,
+Each comment is drafted in `.local/drafts/`, given the outbound review (`publishing.md`), then posted (`gh pr comment`,
 `gh issue comment`); with external writes off a human posts it. Ask early: a missing budget, vague scope or missing exit
 criteria is an Epic defect found before publication, never assumed later.
 
@@ -141,7 +141,7 @@ that asks for a credit line. A human collaborator's `Co-Authored-By` with a nore
 Claude Code is the framework that adds such credits by default, so `.claude/settings.json` switches them off
 (`attribution.commit` and `attribution.pr` empty). For commits the commit-msg hook also rejects them (`structure.md`,
 Commit messages). Issue, pull request and comment text has no check: the rule above is the instruction. The owner may
-allow attribution (through the `adapt-template` skill).
+allow attribution; that is a change of settings (Settings).
 
 ## External writes
 
@@ -155,7 +155,7 @@ Prerequisites the owner configures on the platform before the first Epic are lis
 protection on `main` with pull requests and code-owner review (admins keep bypass, the agent's credential has no admin
 rights), otherwise "protected paths are merged only by humans" has nothing enforcing it. The approving agent shares the
 authoring agent's credential, so the independence of an approval is procedural. Turning writes off again, or on in a
-human-led project, is a protected-file change merged by the owner, made through the `adapt-template` skill.
+human-led project, is a change of settings (Settings), merged by the owner.
 
 ## Confidentiality
 
@@ -177,5 +177,6 @@ Procedure: `publishing.md`.
 Governance model, external writes, publishing standard, agent attribution, commit address, protected paths and the rest
 are the owner's decisions. The agent may present status, options and costs, never widen its own powers by changing them.
 Current values are in AGENTS.md "Current settings" and in the sections above. Options, their costs and the procedure for
-changing one are in the `adapt-template` skill and nowhere else; load it only when a setting is to change. Two things
-are not settings: the Direction Gate cannot be removed and the Acceptance Gate cannot be delegated.
+changing one are not in the knowledge files: changing a setting is an architecture-level adaptation of the harness,
+started on the owner's request and agreed with the owner before any file changes. Two things are not settings: the
+Direction Gate cannot be removed and the Acceptance Gate cannot be delegated.

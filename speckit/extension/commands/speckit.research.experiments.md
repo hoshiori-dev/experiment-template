@@ -35,8 +35,8 @@ stopping rules) before the first proposal.
    sub-issues stays at or below the Epic total. Done when: the list, with allotments and the running sum, is written to
    `.local/drafts/epic-E-experiments.md`.
 
-4. **Outbound review.** Run `just outbound .local/drafts/epic-E-experiments.md`, then read it through with the
-   `outbound-review` skill. Done when: both pass; otherwise rewrite and repeat.
+4. **Outbound review.** Run `just outbound .local/drafts/epic-E-experiments.md`, then give it the read-through of the
+   outbound review (`.agents/knowledge/publishing.md`). Done when: both pass; otherwise rewrite and repeat.
 
 5. **Create the issues.** For each proposal, in the field order of `.github/ISSUE_TEMPLATE/experiment.yml` (Goal, Why it
    belongs to the Epic, Planned allotment, Parent Epic number), run

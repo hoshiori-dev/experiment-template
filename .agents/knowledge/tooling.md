@@ -12,7 +12,7 @@ and `--help` are authoritative for details.
 | local checks          | hooks, record validation, offline tests            | stop mechanical errors before leaving | judge meaning                                                                     |
 | framework permissions | command allow and deny lists per agent framework   | catch slips                           | more than prefix matching; not a boundary                                         |
 | platform              | branch protection, code-owner review, token scopes | the boundary                          | be configured by the agent; tell a solo owner from the agent on the owner's token |
-| agent read-through    | `outbound-review` skill                            | add meaning to the scanner            | be cheap or free of false positives                                               |
+| agent read-through    | outbound review, pass two (`publishing.md`)        | add meaning to the scanner            | be cheap or free of false positives                                               |
 | CI                    | the local checks again on the platform             | backstop                              | prevent a leak: content is already public                                         |
 
 ## Spec Kit
@@ -167,6 +167,20 @@ Read-only queries: `gh api graphql` for the Epic's state, label events and `last
 --parent <epic>` for experiment issues, `gh pr create`,
 `gh pr edit --add-label|--remove-label spec:approved`, `gh pr comment`, `gh issue comment`, `gh pr merge --merge`.
 Experiment and synthesis PRs are merged with merge commits so `Merge pull request #N from ...` leads back to the PR.
+
+## Skills
+
+Project skills live in `.agents/skills/<name>/` (`.claude/skills/` links to them). A skill loads because its description
+matches the task at hand; no harness file names a skill or points to its path, so a description is the only trigger and
+has to carry it: what the skill does, the situations and the wording that call for it, and what it is not for. Harness
+files describe the activity in plain words (for example "the outbound review") and leave the loading to the description.
+
+A new or changed description is checked with trigger tests before it is merged. The cases are in the skill's
+`evals/triggers.md`: prompts that should load it and near-misses that share its vocabulary and should not, each with the
+expected decision. Every case goes to a fresh clean-context agent that is never told which skill is under test, on the
+weakest model tier the project uses, at least twice; the skills each run actually loaded are compared with the
+expectation. A case passes when two runs agree with it. On a failure change the description, not the prompt, and rerun
+all cases of the skills that share vocabulary with it.
 
 ## `.local/` layout
 

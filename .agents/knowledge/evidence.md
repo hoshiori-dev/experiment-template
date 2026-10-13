@@ -204,5 +204,4 @@ environments, and edited old code counts only after it is run again. Rebuilding 
 wheels vanish from their sources. Local tracker storage survives only on this machine, so the key numbers behind a
 conclusion are copied into the README with their Formal Run named. Held-out data staying untouched is discipline fixed
 in each spec's `holdout`; no machine check exists. Changing where runs execute changes only the method: everything above
-stays, and shipping code, building, submitting and fetching results are the agent's to design for the new place (the
-`adapt-template` skill holds the notes).
+stays, and shipping code, building, submitting and fetching results are the agent's to design for the new place.

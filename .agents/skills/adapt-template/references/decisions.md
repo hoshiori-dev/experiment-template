@@ -53,7 +53,7 @@ Opens: commit address.
 Read from: AGENTS.md "Current settings" (Publishing standard); the rule list in `.gitleaks.toml`; the platform
 (`gh repo view --json visibility`).
 Stated in: AGENTS.md, `README.md`, `.agents/knowledge/governance.md` (Confidentiality),
-`.agents/knowledge/publishing.md`, `.gitleaks.toml`, the `outbound-review` skill.
+`.agents/knowledge/publishing.md`, `.gitleaks.toml`, the skill under `.agents/skills/` that performs the outbound review.
 
 ### Governance model
 

@@ -94,8 +94,8 @@ Four requirements; any structure meeting them works:
    squash, no rebase. Experiment and synthesis PRs use the merge-commit method.
 
 Current structure: mainline plus experiment branches. Each Experiment branches from `main` and returns with a merge
-commit; `main` moves during experimentation, so the freeze rests on protected paths and convention. Other structures
-that meet the four requirements are described in the `adapt-template` skill.
+commit; `main` moves during experimentation, so the freeze rests on protected paths and convention. Moving to another
+structure that meets the four requirements is a change of settings (`governance.md`, Settings).
 
 Committing straight to `main` is excluded: every Experiment needs a PR, because the approval label and the merge review
 hang on it. Worktrees for parallel agents are extra local lines inside any structure. Release-oriented branch models

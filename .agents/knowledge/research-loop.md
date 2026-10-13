@@ -154,8 +154,8 @@ or the evidence base becomes unclear. Choose evidence explicitly: what is includ
 knowledge into `docs/` in its style: dense, stable terms; what is accepted and which evidence supports it, linked to
 Experiment READMEs; only qualifiers that change how the knowledge is used; no run logs, no Epic history, no index;
 overturned claims are edited or removed. Open the PR with label `synthesis`, the rendezvous hash, the evidence choices
-and the open questions in its body, then stop: merging is the Acceptance Gate. At the rendezvous also run the
-`harness-checkup` skill; its report stays separate from the synthesis branch.
+and the open questions in its body, then stop: merging is the Acceptance Gate. At the rendezvous also run the periodic
+entropy check of the harness; its report stays separate from the synthesis branch.
 
 ## Where artifacts go
 

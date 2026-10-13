@@ -46,9 +46,9 @@ The proposal becomes knowledge only when a human merges it (the Acceptance Gate)
    3, the proposed changes in one paragraph, and open questions that may open the next Epic. Run
    `just outbound .local/drafts/synthesis-E-pr.md` and fix findings. Done when: the draft passes.
 
-7. **Harness check-up, separately.** Read `.agents/skills/harness-checkup/SKILL.md` and run it as it directs. Its
-   findings go to the note the skill writes, `.local/drafts/harness-checkup-<YYYY-MM-DD>.md`, and its proposed fixes to
-   the branch `harness/checkup-<YYYY-MM-DD>`, never to `synthesis/E`: harness changes are their own branch and their own
+7. **Harness check-up, separately.** Run the periodic entropy check of the harness that belongs to the rendezvous. Its
+   findings go to a dated note under `.local/drafts/` and its proposed fixes to a branch of their own, never to
+   `synthesis/E`: harness changes are their own branch and their own
    review. Done when: the note exists, even when it reports nothing to change.
 
 ## Hand-over

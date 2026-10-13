@@ -167,9 +167,9 @@ Everything above `specs/` is the shared part; humans merge changes to it during 
 ## Adapting the template
 
 Every setting in the table above is the owner's decision. The agent can lay out the options and their cost, but it
-cannot change them to widen its own reach. The [adapt-template skill](.agents/skills/adapt-template/SKILL.md) first
-agrees with the owner what changes, then applies it; it works on a fresh copy and on a project adapted before, and
-covers each one: the governance model, the budget and its unit, an Epic-level hard cap, protected paths, agent
+cannot change them to widen its own reach. An agent skill under [.agents/skills/](.agents/skills/) handles adaptation:
+it first agrees with the owner what changes, then applies it; it works on a fresh copy and on a project adapted before,
+and covers each one: the governance model, the budget and its unit, an Epic-level hard cap, protected paths, agent
 attribution, the commit address, approval-label automation, external writes, the publishing-safety standard, and
 swapping the execution environment, the tracker or the platform.
 

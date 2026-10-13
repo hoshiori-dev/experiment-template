@@ -30,9 +30,11 @@ synthesis branch, or on any experiment branch.
 4. **Duplicated meanings.** Find a rule, list or value stated in more than one file (protected paths, label names,
    budget arithmetic, forbidden content classes, the run record schema, command names). For each, name the file that
    should be the single source and the copies to turn into pointers.
-5. **Unreachable knowledge.** Each `.agents/knowledge/*.md` and each skill is named, with a when-to-read trigger, by
+5. **Unreachable knowledge, named skills.** Each `.agents/knowledge/*.md` is named, with a when-to-read trigger, by
    `AGENTS.md` or by another file `AGENTS.md` reaches. List the files no pointer reaches and the pointers whose trigger
-   is vague ("see X for details").
+   is vague ("see X for details"). Skills are the opposite case: they load by description alone, so list every place
+   outside a skill's own directory that names a project skill or its path, and every project skill whose
+   `evals/triggers.md` is missing or older than its description (`git log -1` on both).
 6. **Rules without a check.** For each rule in the knowledge files that a script or hook could verify mechanically (path
    shape, enum values, branch scope, required fields, naming), check whether one exists in `scripts/` or
    `.pre-commit-config.yaml`. List the candidates with the check that would cover them.

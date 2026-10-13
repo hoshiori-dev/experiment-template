@@ -1,8 +1,8 @@
 # Outbound review
 
 Read this before anything leaves this machine: a push, a pull request, an issue, a comment, an image push, a tracker
-sync, or a file handed to a human to post. Source of truth for the public-repository publishing standard; the procedure
-is the `outbound-review` skill, the five forbidden classes and the three rules are in `governance.md`.
+sync, or a file handed to a human to post. Source of truth for the public-repository publishing standard; this file
+gives the two passes of the outbound review, the five forbidden classes and the three rules are in `governance.md`.
 
 ## Why two passes
 
@@ -36,10 +36,10 @@ neutral aliases (`evidence.md`).
 
 ## Pass two: read-through
 
-Run the `outbound-review` skill over the same content. It looks for the five classes and for what the scanner cannot
-see: a dataset path that names a person, a bucket or hostname spelled as prose, a quoted log line with an internal
-address, a result file carrying raw data, a comment revealing unreleased material, confidential content the owner did
-not clear.
+Read the same content through, as the outbound review of content about to leave this machine. The read-through looks for
+the five classes and for what the scanner cannot see: a dataset path that names a person, a bucket or hostname spelled
+as prose, a quoted log line with an internal address, a result file carrying raw data, a comment revealing unreleased
+material, confidential content the owner did not clear.
 
 ## Reporting a finding
 
@@ -49,8 +49,8 @@ into a tool call, a commit message or a conversation. Then rewrite the content a
 ## One hard guardrail
 
 Content passes a scan by being rewritten, never by changing the scanner: no edit to `.gitleaks.toml`, no allowlist
-entry, no `.gitleaksignore` line, no bypass flag (`--no-verify`, `SKIP=`, `--exit-code 0`). The positive steps (scope,
-scan, read through, report, rewrite, hold) are the `outbound-review` skill's procedure.
+entry, no `.gitleaksignore` line, no bypass flag (`--no-verify`, `SKIP=`, `--exit-code 0`). The positive steps are, in
+order: scope, scan, read through, report, rewrite, hold.
 
 ## Posting
 
