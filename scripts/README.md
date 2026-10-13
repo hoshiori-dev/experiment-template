@@ -44,16 +44,17 @@ platform and the parent Epic of issue NNN valid (`epic_status.check`, the parent
 `gh issue view NNN --json parent`); budget fits, computed over the budget base of `budget.py` plus HEAD's own record;
 every declared data input present under `.local/data/<name>/VERSION` with the declared version; a GPU request satisfied
 by a working `nvidia-smi`. `--skip-platform` leaves approval and Epic validity unconfirmed and says so. Exit `2` when
-the platform cannot be reached. The agent runs it immediately before launching a formal run
-(`just preflight <exp> <run>`).
+the platform cannot be reached; an experiment issue that does not exist is a finding (exit `1`), not an outage. The
+agent runs it immediately before launching a formal run (`just preflight <exp> <run>`).
 
 ## epic_status.py
 
 `epic_status.py <issue-number> [--repo OWNER/REPO] [--json]` decides whether an Epic is valid with one read-only GraphQL
 query: open; labelled `epic:approved`; the label added after creation (an event within 5 s of `createdAt` by the issue
 author counts as "at creation"); body not edited after that label event. Network failures are retried three times with
-backoff; exit `2` when the platform stays unreachable, and validity is never assumed. The agent runs it before creating
-an experiment and before every formal run (`just epic-status <n>`).
+backoff; exit `2` when the platform stays unreachable, and validity is never assumed. An issue number that does not
+exist is an answer, not an outage: exit `1` with `#<n>: no such issue`. The agent runs it before creating an experiment
+and before every formal run (`just epic-status <n>`).
 
 ## spec_approval.py
 

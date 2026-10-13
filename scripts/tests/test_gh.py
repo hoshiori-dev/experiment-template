@@ -33,6 +33,25 @@ def test_other_failures_are_not_retried():
     assert len(gh.calls) == 1
 
 
+def test_missing_issue_is_not_found_and_not_retried():
+    gh = FakeGh(
+        {
+            "issue view": (
+                1,
+                "",
+                "GraphQL: Could not resolve to an issue or pull request with the number of 23. (repository.issue)",
+            )
+        }
+    )
+    with pytest.raises(_gh.GhNotFound):
+        _gh.gh_json(["issue", "view", "23"], gh, no_sleep)
+    assert len(gh.calls) == 1
+    gh = FakeGh({"pr list": (1, "", "GraphQL: Could not resolve to a Repository")})
+    with pytest.raises(_gh.GhUnreachable) as raised:
+        _gh.gh_json(["pr", "list"], gh, no_sleep)
+    assert not isinstance(raised.value, _gh.GhNotFound)
+
+
 def test_non_json_output_is_unreachable():
     gh = FakeGh({"pr list": (0, "not json", "")})
     with pytest.raises(_gh.GhUnreachable):

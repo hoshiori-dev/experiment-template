@@ -103,5 +103,12 @@ def test_cli_unreachable(capsys):
     gh = FakeGh({"api graphql": (1, "", "error connecting to api.github.com: timeout")})
     assert epic_status.main(["7", "--repo", "o/r"], gh, no_sleep) == 2
     assert "validity unknown" in capsys.readouterr().out
+
+
+def test_cli_missing_issue_is_a_finding(capsys):
     gh = FakeGh({"api graphql": (0, json.dumps({"data": {"repository": {"issue": None}}}), "")})
-    assert epic_status.main(["7", "--repo", "o/r"], gh, no_sleep) == 2
+    assert epic_status.main(["7", "--repo", "o/r"], gh, no_sleep) == 1
+    assert "#7: no such issue in o/r" in capsys.readouterr().out
+    gh = FakeGh({"api graphql": (1, "", "gh: Could not resolve to an Issue with the number of 7.")})
+    assert epic_status.main(["7", "--repo", "o/r"], gh, no_sleep) == 1
+    assert "#7: no such issue in o/r" in capsys.readouterr().out

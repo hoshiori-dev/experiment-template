@@ -2,8 +2,9 @@
 
 ``gh_json`` runs ``gh <args>`` and parses its JSON output. A non-zero exit whose stderr
 mentions the network or a timeout is retried three times with backoff; any other failure,
-or three failed attempts, raises ``GhUnreachable``. Tests pass a fake ``runner`` and a
-no-op ``sleep`` so nothing touches the network.
+or three failed attempts, raises ``GhUnreachable``. An issue or pull request that does not
+exist raises ``GhNotFound``, which callers that know the number report as a finding. Tests
+pass a fake ``runner`` and a no-op ``sleep`` so nothing touches the network.
 """
 
 from __future__ import annotations
@@ -30,10 +31,19 @@ NETWORK_MARKERS = (
     "503",
     "504",
 )
+NOT_FOUND_MARKER = "could not resolve to an issue"
 
 
 class GhUnreachable(RuntimeError):
     """The platform could not be queried; the caller exits 2 and never assumes validity."""
+
+
+class GhNotFound(GhUnreachable):
+    """The platform answered: the issue or pull request does not exist. Retrying cannot help.
+
+    A subclass of ``GhUnreachable`` so that a caller without a specific handler still
+    refuses to assume validity.
+    """
 
 
 def run_gh(args: list[str]) -> tuple[int, str, str]:
@@ -65,7 +75,10 @@ def gh_output(
             break
         if attempt < RETRIES - 1:
             sleep(2**attempt)
-    raise GhUnreachable(f"gh {' '.join(args)}: {stderr.strip() or f'exit {code}'}")
+    message = f"gh {' '.join(args)}: {stderr.strip() or f'exit {code}'}"
+    if NOT_FOUND_MARKER in stderr.lower():
+        raise GhNotFound(message)
+    raise GhUnreachable(message)
 
 
 def gh_json(

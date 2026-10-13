@@ -28,7 +28,7 @@ import yaml
 
 import epic_status
 import spec_approval
-from _gh import GhUnreachable, Runner, add_repo_option, gh_json, resolve_repo, run_gh
+from _gh import GhNotFound, GhUnreachable, Runner, add_repo_option, gh_json, resolve_repo, run_gh
 from _git import (
     GitError,
     commit_count,
@@ -135,7 +135,11 @@ def check_platform(exp_id: str, repo: str | None, runner: Runner, sleep) -> list
     repo = resolve_repo(repo, runner, sleep)
     findings = spec_approval.check(exp_id, repo, runner, sleep)["reasons"]
     number = issue_number(exp_id)
-    parent = gh_json(["issue", "view", str(number), "--repo", repo, "--json", "parent"], runner, sleep).get("parent")
+    try:
+        issue = gh_json(["issue", "view", str(number), "--repo", repo, "--json", "parent"], runner, sleep)
+    except GhNotFound:
+        return findings + [f"#{number}: no such issue in {repo}; the Experiment ID names its experiment issue"]
+    parent = issue.get("parent")
     if not parent:
         return findings + [f"#{number}: has no parent issue; an experiment issue is a sub-issue of its Epic"]
     return findings + epic_status.check(parent["number"], repo, runner, sleep)["reasons"]

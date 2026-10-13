@@ -18,7 +18,7 @@ import sys
 import time
 from datetime import datetime, timedelta
 
-from _gh import GhUnreachable, Runner, add_repo_option, gh_json, resolve_repo, run_gh
+from _gh import GhNotFound, GhUnreachable, Runner, add_repo_option, gh_json, resolve_repo, run_gh
 
 APPROVAL_LABEL = "epic:approved"
 AT_CREATION_WINDOW = timedelta(seconds=5)
@@ -90,7 +90,20 @@ def check(number: int, repo: str | None, runner: Runner = run_gh, sleep=time.sle
     """{"valid": bool, "reasons": [...]}; raises GhUnreachable."""
     repo = resolve_repo(repo, runner, sleep)
     owner, name = repo.split("/", 1)
-    data = gh_json(
+    missing = {"valid": False, "number": number, "reasons": [f"#{number}: no such issue in {repo}"]}
+    try:
+        data = _query(owner, name, number, runner, sleep)
+    except GhNotFound:
+        return missing
+    issue = ((data.get("data") or {}).get("repository") or {}).get("issue")
+    if not issue:
+        return missing
+    reasons = evaluate(issue)
+    return {"valid": not reasons, "number": number, "reasons": reasons}
+
+
+def _query(owner: str, name: str, number: int, runner: Runner, sleep) -> dict:
+    return gh_json(
         [
             "api",
             "graphql",
@@ -106,11 +119,6 @@ def check(number: int, repo: str | None, runner: Runner = run_gh, sleep=time.sle
         runner,
         sleep,
     )
-    issue = ((data.get("data") or {}).get("repository") or {}).get("issue")
-    if not issue:
-        raise GhUnreachable(f"#{number}: not an issue in {repo}")
-    reasons = evaluate(issue)
-    return {"valid": not reasons, "number": number, "reasons": reasons}
 
 
 def main(argv: list[str] | None = None, runner: Runner = run_gh, sleep=time.sleep) -> int:

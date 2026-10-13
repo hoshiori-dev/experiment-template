@@ -45,6 +45,18 @@ def test_invalid_or_missing_epic_blocks_the_run(experiment: Repo, capsys):
     assert "#23: has no parent issue" in capsys.readouterr().out
 
 
+def test_missing_experiment_issue_is_a_finding(experiment: Repo, capsys):
+    start_run(experiment, "R001")
+    fetch_data(experiment)
+    gh = approved_gh()
+    gh.responses["issue view"] = [
+        (1, "", "GraphQL: Could not resolve to an issue or pull request with the number of 23. (repository.issue)")
+    ]
+    assert run_preflight.main([EXP, "R001"], gh, no_sleep) == 1
+    out = capsys.readouterr().out
+    assert "#23: no such issue in o/r" in out and "unreachable" not in out
+
+
 def test_skip_platform_does_not_confirm_approval(experiment: Repo, capsys):
     start_run(experiment, "R001")
     fetch_data(experiment)
