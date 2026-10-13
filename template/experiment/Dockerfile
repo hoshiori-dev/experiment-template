@@ -5,7 +5,7 @@
 # separate layers, and the dependency layer is keyed by the manifest's content alone.
 # Any image that meets the boundaries is fine; edit freely.
 #
-# Build context: the experiment directory as of the source commit (`just image <commit>`
+# Build context: the experiment directory as of the source commit (`just build <commit>`
 # in this directory extracts it with git archive and builds).
 
 # Keep the base image and the uv release as the starter has them unless the plan says why:

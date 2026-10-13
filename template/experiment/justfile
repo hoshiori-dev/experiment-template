@@ -8,8 +8,8 @@ set positional-arguments
 exp := file_name(justfile_directory())
 root := justfile_directory() / "../.."
 
-# Build the image from this directory as of a commit: just image [commit]
-image commit="HEAD":
+# Build the image from this directory as of a commit: just build [commit]
+build commit="HEAD":
     #!/usr/bin/env bash
     set -euo pipefail
     context=$(mktemp -d)
