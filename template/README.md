@@ -23,16 +23,16 @@ long as the boundaries still hold. Container and lock-file mechanics in it are t
 
 ## What the files are
 
-| File                 | Purpose                                                                                              |
-| -------------------- | ---------------------------------------------------------------------------------------------------- |
-| `README.md`          | The deliverable: six fixed sections and a status line. Must stand alone after `specs/<id>/` is gone. |
-| `pyproject.toml`     | The experiment's dependency declaration; ships as the project baseline.                              |
-| `uv.lock`            | The baseline lock. The experiment owns its copy; it stays identical unless the plan gives a reason.  |
-| `requirements.txt`   | The frozen hashed manifest the image installs; written by `just freeze`, never edited by hand.       |
-| `Dockerfile`         | Example environment: hash-verified manifest in a layer of its own, source in a later layer.          |
-| `justfile`           | Example build and launch recipes (`just build`, `just run`); root recipes stay reachable from here.  |
-| `.dockerignore`      | Keeps local environments and caches out of the build context.                                        |
-| `../run-record.yaml` | Annotated run record; copy it to `experiments/<id>/runs/R001.yaml` and fill it in.                   |
+| File                 | Purpose                                                                                                         |
+| -------------------- | --------------------------------------------------------------------------------------------------------------- |
+| `README.md`          | The deliverable: six fixed sections and a status line. Must stand alone after `specs/<id>/` is gone.            |
+| `pyproject.toml`     | The experiment's dependency declaration; ships as the project baseline.                                         |
+| `uv.lock`            | The baseline lock. The experiment owns its copy; it stays identical unless the plan gives a reason.             |
+| `requirements.txt`   | The frozen hashed manifest the image installs; written by `just freeze`, never edited by hand.                  |
+| `Dockerfile`         | Example environment: hash-verified manifest in a layer of its own, source in a later layer.                     |
+| `justfile`           | Example build and launch recipes (`just build`, `just try`, `just run`); root recipes stay reachable from here. |
+| `.dockerignore`      | Keeps local environments and caches out of the build context.                                                   |
+| `../run-record.yaml` | Annotated run record; copy it to `experiments/<id>/runs/R001.yaml` and fill it in.                              |
 
 `runs/` is created by the first formal run (record `R001.yaml`); the starter ships no `runs/` directory because an empty
 directory has nothing to say and a placeholder file would be mistaken for a record. Other directories (source, configs,
@@ -45,6 +45,7 @@ record, the frozen manifest and run-specific inputs; nothing else is committed b
 append the outcome fields and the result files, then merge the run branch back with a merge commit. The manifest is
 `requirements.txt` as the source commit has it; `just freeze <id> [backend]` regenerates it when dependencies change
 (with PyTorch, pass the exact accelerator backend and install with the same `--torch-backend=cuXXX` in the image;
-details in `.agents/knowledge/evidence.md`, Environment). In the experiment directory, `just build <commit>` builds the
-image from that commit and `just run <R###> <commit> <command>...` launches it offline with outputs under
-`.local/runs/`. `just preflight <id> R001` checks the start conditions that a machine can check.
+details in `.agents/knowledge/evidence.md`, Environment). In the experiment directory, `just run <R###> <command>...`
+looks up the run's source commit, builds the image from it and launches it offline with outputs under `.local/runs/`;
+`just try <command>...` does the same from the working tree for informal runs and keeps nothing.
+`just preflight <id> R001` checks the start conditions that a machine can check.

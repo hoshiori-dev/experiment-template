@@ -8,24 +8,33 @@ set positional-arguments
 exp := file_name(justfile_directory())
 root := justfile_directory() / "../.."
 
-# Build the image from this directory as of a commit: just build [commit]
-build commit="HEAD":
+# Build the image from the working tree, for informal runs: just build
+build:
+    docker build -t "{{ exp }}:dev" "{{ justfile_directory() }}"
+
+# Informal run: launch a command in the working-tree image, offline; nothing is kept: just try <command>...
+try +command: build
     #!/usr/bin/env bash
     set -euo pipefail
+    data="$(cd "{{ root }}" && pwd)/.local/data"
+    mkdir -p "$data"
+    docker run --rm --network none --user "$(id -u):$(id -g)" --tmpfs /tmp --tmpfs /out -e HOME=/tmp \
+        -v "$data:/data:ro" "{{ exp }}:dev" "$@"
+
+# Formal Run: launch a command in the image of the run's source commit, offline, with data
+# read-only and outputs under .local/runs/<exp-id>/<R###>/: just run <R###> <command>...
+run id +command:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    root="$(cd "{{ root }}" && pwd)"
+    commit=$(cd "$root" && uv run python scripts/source_commit.py "{{ exp }}" "$1") || { echo "$commit" >&2; exit 1; }
     context=$(mktemp -d)
     trap 'rm -rf "$context"' EXIT
-    git -C "{{ root }}" archive "$1:experiments/{{ exp }}" | tar -x -C "$context"
-    docker build -t "{{ exp }}:$(git -C "{{ root }}" rev-parse --short "$1")" "$context"
-
-# Launch a command in the image of a commit, offline, with data read-only and outputs
-# under .local/runs/<exp-id>/<R###>/: just run <R###> <commit> <command>...
-run id commit +command:
-    #!/usr/bin/env bash
-    set -euo pipefail
-    local="$(cd "{{ root }}" && pwd)/.local"
-    out="$local/runs/{{ exp }}/$1"
-    mkdir -p "$out" "$local/trackio" "$local/data"
+    git -C "$root" archive "$commit:experiments/{{ exp }}" | tar -x -C "$context"
+    docker build -t "{{ exp }}:${commit:0:12}" "$context"
+    out="$root/.local/runs/{{ exp }}/$1"
+    mkdir -p "$out" "$root/.local/trackio" "$root/.local/data"
     docker run --rm --network none --user "$(id -u):$(id -g)" --tmpfs /tmp -e HOME=/tmp \
-        -e SOURCE_COMMIT="$(git -C "{{ root }}" rev-parse "$2")" -e FORMAL_RUN="{{ exp }}/$1" \
-        -v "$local/data:/data:ro" -v "$out:/out" -v "$local/trackio:/trackio" -e TRACKIO_DIR=/trackio \
-        "{{ exp }}:$(git -C "{{ root }}" rev-parse --short "$2")" "${@:3}"
+        -e SOURCE_COMMIT="$commit" -e FORMAL_RUN="{{ exp }}/$1" \
+        -v "$root/.local/data:/data:ro" -v "$out:/out" -v "$root/.local/trackio:/trackio" -e TRACKIO_DIR=/trackio \
+        "{{ exp }}:${commit:0:12}" "${@:2}"
